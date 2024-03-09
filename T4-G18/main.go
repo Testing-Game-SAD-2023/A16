@@ -19,6 +19,7 @@ import (
 	"github.com/alarmfox/game-repository/api/robot"
 	"github.com/alarmfox/game-repository/api/round"
 	"github.com/alarmfox/game-repository/api/turn"
+	//A16 - "github.com/alarmfox/game-repository/api/player"
 	"github.com/alarmfox/game-repository/limiter"
 	"github.com/alarmfox/game-repository/model"
 	"github.com/go-chi/chi/v5"
@@ -388,5 +389,16 @@ func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller,
 
 	})
 
+	/*	A16 - PAPPONE SCHIATTA
+	r.Route("/players", func(r chi.Router){
+		
+
+		// List player
+		r.Get("/", api.HandlerFunc(pc.ListPlayers))
+		// Update player
+		r.With(middleware.AllowContentType("application/json")).
+			Put("/{accountId}", api.HandlerFunc(pc.Update))
+	})
+*/
 	return r
 }
