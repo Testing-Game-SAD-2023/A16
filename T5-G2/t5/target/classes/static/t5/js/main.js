@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
   document.getElementById("usernameField").innerText = parseJwt(getCookie("jwt")).sub;
 });
 
+
 function selectGameMode(mode) {
   console.log("Modalità selezionata:", mode);
   localStorage.setItem("modalita", mode);
@@ -41,11 +42,20 @@ function selectGameMode(mode) {
   if (mode === "Sfida un Robot" || mode === "Allenamento") {
     // Redirect alla pagina per giocare con il robot
     window.location.href = "/gamemode";
-  } else if (mode === "Multiplayer") {
+  }
+
+  //A16 - Integrazione 1 VS ALL
+  if (mode === "Sfida tutti i Robot") {
+    // Redirect alla pagina per giocare contro tutti i Robot
+    window.location.href = "/all_robots";
+  }
+
+  if (mode === "Multiplayer") {
     // Avvisa l'utente che questa modalità non è ancora disponibile
     alert("La modalità " + mode + " non è ancora disponibile. Arriverà presto!");
   }
 }
+
 
 function Handlebuttonclass(id, button) {
   $(document).ready(function () {
@@ -278,4 +288,50 @@ function saveLoginData() {
 
 
   console.log("username :", username);
+}
+
+//A16 - Integrazione 
+function redirectToPageReport1(){
+  console.log(classe);
+  if(classe){
+    localStorage.setItem("classe", classe);
+    localStorage.setItem("robot", "Tutti i Robot");
+    window.location.href = "/report1";
+  }
+  else {
+    alert("Seleziona una classe");
+    console.log("Seleziona una classe");
+  }
+}
+
+//A16 - Integrazione
+function redirectToAllRobots() {
+  window.location.href = "/all_robots";
+}
+
+//A16 - Integrazione
+function redirectToPageeditor_all() {
+  $.ajax({
+    url:'http://localhost/api/save-data',
+    data: {
+      playerId: parseJwt(getCookie("jwt")).userId,
+      classe: classe,
+      robot: robot,
+      difficulty: difficulty
+    },
+    type:'POST',
+    success: function (response) {
+      // Gestisci la risposta del server qui
+      localStorage.setItem("gameId", response.game_id);
+      localStorage.setItem("turnId", response.turn_id);
+      localStorage.setItem("roundId", response.round_id);
+      window.location.href = "/editor1";
+    },
+    dataType: "json",
+    error: function (error) {
+      console.error('Errore nell invio dei dati');
+      alert("Dati non inviati con successo");
+      // Gestisci l'errore qui
+    }
+  })
 }

@@ -333,4 +333,62 @@ public class GuiController {
         return "editorAllenamento";
     }
 
+    //A16 - Integrazione di Mapping per la pagina all_robots
+    @GetMapping("/all_robots")
+    public String AllRobotsPage(Model model, @CookieValue(name = "jwt", required = false) String jwt){
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("jwt", jwt);
+
+        Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
+
+        if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+
+        List<ClassUT> classes = getClasses();
+
+        Map<Integer, String> hashMap = new HashMap<>();
+        Map<Integer, List<MyData>> robotList = new HashMap<>();
+        //Map<Integer, List<String>> evosuiteLevel = new HashMap<>();
+
+        for (int i = 0; i < classes.size(); i++) {
+            String valore = classes.get(i).getName();
+
+            List<String> levels = getLevels(valore);
+            System.out.println(levels);
+
+            List<String> evo = new ArrayList<>(); //aggiunto
+            for(int j = 0; j<levels.size(); j++){ //aggiunto
+                if(j>=levels.size()/2)
+                    evo.add(j,levels.get(j-(levels.size()/2)));
+                else{
+                    evo.add(j,levels.get(j+(levels.size()/2)));
+                }     
+            }
+            System.out.println(evo);
+
+            List<MyData> struttura = new ArrayList<>();
+            
+            for(int j = 0; j<levels.size(); j++){
+                MyData strutt = new MyData(levels.get(j),evo.get(j));
+                struttura.add(j,strutt);
+            }
+            
+
+            for(int j = 0; j<struttura.size(); j++)  
+                System.out.println(struttura.get(j).getList1());
+            hashMap.put(i, valore);
+            robotList.put(i, struttura);
+            //evosuiteLevel.put(i, evo);
+        }
+
+        model.addAttribute("hashMap", hashMap);
+
+        // hashMap2 = com.g2.Interfaces.t8.RobotList();
+
+        model.addAttribute("hashMap2", robotList);
+        return "all_robots";
+    }
+
+
+
+
 }
