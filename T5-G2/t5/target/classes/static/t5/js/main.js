@@ -310,7 +310,7 @@ function redirectToAllRobots() {
 }
 
 //A16 - Integrazione
-function redirectToPageeditor_all() {
+/*function redirectToPageeditor_all() {
   $.ajax({
     url:'http://localhost/api/save-data',
     data: {
@@ -334,4 +334,4 @@ function redirectToPageeditor_all() {
       // Gestisci l'errore qui
     }
   })
-}
+}*/

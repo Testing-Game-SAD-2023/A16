@@ -389,6 +389,19 @@ public class GuiController {
     }
 
 
+    //A16 - Integrazione di Mapping per la pagina report1 (quella che serve per 1 VS ALL)
+    @GetMapping("/report1")
+    public String report1Page(Model model, @CookieValue(name = "jwt",required = false) String jwt) {
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("jwt", jwt);
+
+        Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
+
+        if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+        
+        return "report1";
+    }
+
 
 
 }
