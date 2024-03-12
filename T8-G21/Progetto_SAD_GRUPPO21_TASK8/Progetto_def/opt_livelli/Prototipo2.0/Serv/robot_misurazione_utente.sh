@@ -102,6 +102,7 @@ else
     cp -f evosuite-report/statistics.csv "$(dirname $PERCORSO_TEST)/GameData.csv"
 fi
 
+
 mv -f evosuite-report/statistics.csv $PERCORSO_CSV
 
 #wget http://localhost:3081/api/

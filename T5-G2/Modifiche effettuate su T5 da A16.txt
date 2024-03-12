@@ -3,5 +3,7 @@
 3. Aggiunto il mapping in GuiController.java di all_robots
 4. Modificato il file default.conf in ui_gateway al fine di mappare correttamente la pagina all_robots
 5. Aggiunto report1 per riepilogo contro tutti i robot
+6. aggiunta bottoni go back
 
-6.  vedere bene il funzionamento per le pagine editor e vedere se l'aggiunta funziona correttamente
+
+7.  vedere bene il funzionamento per le pagine editor e vedere se l'aggiunta funziona correttamente

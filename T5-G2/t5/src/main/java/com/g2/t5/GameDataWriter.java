@@ -12,6 +12,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.http.client.methods.HttpPut; //A16 - aggiunta
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -111,6 +112,24 @@ public class GameDataWriter {
             round.put("gameId", game_id);
             round.put("testClassId", game.getClasse());
             round.put("startedAt", time);
+
+            //A16 - Aggiunta delle modifiche di A9
+            //----------------MODIFICHE A9-----------------------------
+            JSONObject newPlayerObj = new JSONObject();
+            newPlayerObj.put("name",game.getPlayerName());
+
+            String newPlayerUrl ="http://t4-g18-app-1:3000/players/" + game.getPlayerId();
+
+            HttpPut httpPutPlayer = new HttpPut(newPlayerUrl);
+            StringEntity jsoEntityPlayer = new StringEntity(newPlayerObj.toString(),ContentType.APPLICATION_JSON);
+            httpPutPlayer.setEntity(jsoEntityPlayer);
+
+            HttpResponse newPlayerResponse = httpClient.execute(httpPutPlayer);
+            int newPlayerStatusCode = newPlayerResponse.getStatusLine().getStatusCode();
+//---------------- FINE MODIFICHE A9-----------------------------
+
+
+
 
             httpPost = new HttpPost("http://t4-g18-app-1:3000/rounds");
             jsonEntity = new StringEntity(round.toString(), ContentType.APPLICATION_JSON);

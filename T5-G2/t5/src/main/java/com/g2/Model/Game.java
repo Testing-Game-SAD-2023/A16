@@ -6,6 +6,7 @@ import java.time.*;
 
 public class Game {
     private int playerId;
+    private String playerName; //aggiunta A16 da A9    
     private long id;
     private String description;
     private String name;
@@ -21,6 +22,7 @@ public class Game {
 
     public Game(int playerId, String description, String name, String difficulty, String username) {
         this.playerId = playerId;
+        this.playerName = playerName; // aggiunta A16 da A9 
         this.description = description;
         this.name = name;
         this.difficulty = difficulty;
@@ -30,6 +32,10 @@ public class Game {
 
     public int getPlayerId() {
         return playerId;
+    }
+
+    public String getPlayerName(){  //aggiunta A16 da A9 
+        return playerName;
     }
 
     public void setPlayerId(int playerId) {

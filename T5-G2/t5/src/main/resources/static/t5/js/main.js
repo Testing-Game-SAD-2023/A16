@@ -195,8 +195,8 @@ function redirectToPageeditor() {
         console.error("Errore durante la rimozione delle cartelle di allenamento:", errorThrown);
       }
     });
-
-  } else {
+  } 
+  else {
     $.ajax({
       url: '/api/save-data',
       data: {
@@ -225,6 +225,32 @@ function redirectToPageeditor() {
 
     })
   }
+
+   /* //A16 - Aggiunto per integrare 1 VS ALL
+    $.ajax({
+      url:'http://localhost/api/save-data',
+      data: {
+        playerId: parseJwt(getCookie("jwt")).userId,
+        classe: classe,
+        robot: robot,
+        difficulty: difficulty
+      },
+      type:'POST',
+      success: function (response) {
+        // Gestisci la risposta del server qui
+        localStorage.setItem("gameId", response.game_id);
+        localStorage.setItem("turnId", response.turn_id);
+        localStorage.setItem("roundId", response.round_id);
+        window.location.href = "/editor_all";
+      },
+      dataType: "json",
+      error: function (error) {
+        console.error('Errore nell invio dei dati');
+        alert("Dati non inviati con successo");
+        // Gestisci l'errore qui
+      }
+    })*/
+  
 }
 
 // Funzione per gestire il click sul bottone di download
@@ -304,20 +330,21 @@ function redirectToPageReport1(){
   }
 }
 
-//A16 - Integrazione
+//A16 - Integrazione per 1 VS ALL
 function redirectToAllRobots() {
   window.location.href = "/all_robots";
 }
 
 //A16 - Integrazione
-/*function redirectToPageeditor_all() {
+function redirectToPageeditor_all() {
   $.ajax({
-    url:'http://localhost/api/save-data',
+    url:'/api/save-data',
     data: {
       playerId: parseJwt(getCookie("jwt")).userId,
       classe: classe,
       robot: robot,
-      difficulty: difficulty
+      difficulty: difficulty,
+      username: localStorage.getItem("username")
     },
     type:'POST',
     success: function (response) {
@@ -325,7 +352,8 @@ function redirectToAllRobots() {
       localStorage.setItem("gameId", response.game_id);
       localStorage.setItem("turnId", response.turn_id);
       localStorage.setItem("roundId", response.round_id);
-      window.location.href = "/editor1";
+      localStorage.setItem("orderTurno", "1");
+      window.location.href = "/editor_all";
     },
     dataType: "json",
     error: function (error) {
@@ -334,4 +362,4 @@ function redirectToAllRobots() {
       // Gestisci l'errore qui
     }
   })
-}*/
+}

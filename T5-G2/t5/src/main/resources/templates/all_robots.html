@@ -67,7 +67,8 @@
 
         <div class="div_buttons_main">
             <div class="div_back_main">
-              <button type="button" class="btn custom-button" th:onclick="redirectToPageReport1()">Play against all Robots</button>
+              <button type="button" class="btn custom-button" th:onclick="redirectToPagemain(); saveLoginData()">Go back</button>
+              <button type="button" class="btn custom-button" th:onclick="redirectToPageReport1(); saveLoginData()">Play against all Robots</button>
             </div>
       </div>
 </body>
