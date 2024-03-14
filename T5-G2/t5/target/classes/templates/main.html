@@ -55,7 +55,7 @@
     <script>
         var username = parseJwt(getCookie("jwt")).sub;
         username = username.toString();
-        localStorage.setItem("username", username);
+        localStorage.setItem("username", username); //A16 - Nello Store Locale salvo l'username di colui che si è loggato
         console.log("username :", username);
     </script>
 </body>

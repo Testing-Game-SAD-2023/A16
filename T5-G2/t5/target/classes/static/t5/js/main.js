@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 function selectGameMode(mode) {
   console.log("Modalità selezionata:", mode);
-  localStorage.setItem("modalita", mode);
+  localStorage.setItem("modalita", mode); //A16 - In locale salvo la modalita' che ho scelto
 
   // Verifica la modalità selezionata
   if (mode === "Sfida un Robot" || mode === "Allenamento") {
@@ -46,7 +46,7 @@ function selectGameMode(mode) {
 
   //A16 - Integrazione 1 VS ALL
   if (mode === "Sfida tutti i Robot") {
-    // Redirect alla pagina per giocare contro tutti i Robot
+    // Redirect alla pagina per giocare contro TUTTI i Robot
     window.location.href = "/all_robots";
   }
 
@@ -310,13 +310,12 @@ function saveLoginData() {
 
   username = username.toString();
 
-  localStorage.setItem("username", username);
-
+  localStorage.setItem("username", username); //A16 - Nello Store Locale salvo l'username di colui che si è loggato (non so perchè si ripete anche in main.html)
 
   console.log("username :", username);
 }
 
-//A16 - Integrazione 
+//A16 - Integrazione da A6
 function redirectToPageReport1(){
   console.log(classe);
   if(classe){
@@ -344,7 +343,7 @@ function redirectToPageeditor_all() {
       classe: classe,
       robot: robot,
       difficulty: difficulty,
-      username: localStorage.getItem("username") //A16 - Aggiunta
+      username: localStorage.getItem("username")
     },
     type:'POST',
     success: function (response) {
@@ -352,7 +351,7 @@ function redirectToPageeditor_all() {
       localStorage.setItem("gameId", response.game_id);
       localStorage.setItem("turnId", response.turn_id);
       localStorage.setItem("roundId", response.round_id);
-      localStorage.setItem("orderTurno", "1"); //A16 - Aggiunta
+      localStorage.setItem("orderTurno", "1");
       window.location.href = "/editor_all";
     },
     dataType: "json",
