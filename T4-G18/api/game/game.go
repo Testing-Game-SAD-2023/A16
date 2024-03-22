@@ -18,7 +18,7 @@ type Game struct {
 	UpdatedAt    time.Time  `json:"updatedAt"`
 	StartedAt    *time.Time `json:"startedAt"`
 	ClosedAt     *time.Time `json:"closedAt"`
-	IsWinner  	 bool       `json:"isWinner"`
+	IsWinner  	 bool       `json:"isWinner"`				//A16: considerazione, A6 non mette isWinner qui
 	Name         string     `json:"name"`
 	Players      []Player   `json:"players,omitempty"`
 }
@@ -48,7 +48,7 @@ type UpdateRequest struct {
 	Username	 string		`json:"username"`
 	Description  string     `json:"description"`
 	Score		 float64	`json:"score"`
-	IsWinner  	 bool       `json:"isWinner"`
+	IsWinner  	 bool       `json:"isWinner"`				//A16: considerazione, A6 non mette isWinner qui
 	StartedAt    *time.Time `json:"startedAt,omitempty"`
 	ClosedAt     *time.Time `json:"closedAt,omitempty"`
 }
@@ -99,7 +99,7 @@ func fromModel(g *model.Game) Game {
 		CreatedAt:    g.CreatedAt,
 		UpdatedAt:    g.UpdatedAt,
 		Name:         g.Name,
-		IsWinner:     g.IsWinner,
+		IsWinner:     g.IsWinner,					//A16: considerazione, A6 non mette isWinner qui
 		StartedAt:    g.StartedAt,
 		ClosedAt:     g.ClosedAt,
 		Players:      parsePlayers(g.Players),

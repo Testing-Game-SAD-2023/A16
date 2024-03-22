@@ -103,7 +103,7 @@ storico.addEventListener("click", function () {
 var runButton = document.getElementById("runButton");
 runButton.addEventListener("click", function () {
 
-  document.getElementById('loading-editor').style.display = 'block';
+  document.getElementById('loading-editor').style.display = 'block'; //A16 - Schermata Caricamento
   $(document).ready(function () {
     if (localStorage.getItem("gameId") == "null") { //controllo game invece che turn
       document.getElementById('loading-editor').style.display = 'none';

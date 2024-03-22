@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"														//A16: aggiunta da A6
 
 	"github.com/alarmfox/game-repository/api"
 )
@@ -17,6 +18,7 @@ type Service interface {
 	FindByRound(id int64) ([]Turn, error)
 	SaveFile(id int64, r io.Reader) error
 	GetFile(id int64) (string, *os.File, error)
+	GetTurnsByAccountID(accountID string) ([]Turn, error)			//A16: aggiunta da A6
 }
 
 type Controller struct {
@@ -62,6 +64,23 @@ func (tc *Controller) Update(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return api.WriteJson(w, http.StatusOK, turn)
+}
+
+//A16: aggiunta la funzione qui sotto da A6
+func (tc *Controller) ListByAccount(w http.ResponseWriter, r  *http.Request) error{
+	var accountID KeyType
+	accountID, err := api.FromUrlParams[KeyType](r, "accountID")
+	if err != nil{
+		return err
+	}
+	accountIDString := strconv.FormatInt(int64(accountID),10)
+	turns, err := tc.service.GetTurnsByAccountID(accountIDString)
+	if err != nil {
+		return api.MakeHttpError(err)
+	}
+
+	return api.WriteJson(w, http.StatusOK, turns)
+
 }
 
 func (tc *Controller) FindByID(w http.ResponseWriter, r *http.Request) error {

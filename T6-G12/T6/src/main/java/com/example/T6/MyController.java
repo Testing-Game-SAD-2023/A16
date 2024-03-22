@@ -43,10 +43,26 @@ import org.json.JSONObject;
 import org.apache.http.client.utils.URIBuilder;
 //import net.minidev.json.JSONObject;
 
+
+//A16 importazione
+import com.example.T6.RunnerHelper.ScorePair;
+
 @CrossOrigin
 @Controller
 public class MyController {
     private final RestTemplate restTemplate;
+
+
+    //A16  - Integrazione per classUndertest
+    public static class ClassUnderTestData{
+        String nomeCUT;
+        String robotScelto;
+        String difficolta;
+    }
+    private ClassUnderTestData currentClassUnderTestData;
+
+
+
 
     @Autowired
     public MyController(RestTemplate restTemplate) {
@@ -58,7 +74,8 @@ public class MyController {
         return "index";
     }
 
-    @GetMapping("/receiveClassUnderTest")
+    //Originale A7
+    /*@GetMapping("/receiveClassUnderTest")
     public ResponseEntity<String> receiveClassUnderTest(
             @RequestParam("idUtente") String idUtente,
             @RequestParam("nomeCUT") String nomeCUT,
@@ -86,7 +103,48 @@ public class MyController {
             return new ResponseEntity<>("Errore durante la ricezione del file ClassUnderTest.java",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }*/
+
+    //A16 - Aggiunto da A6 (idPartita, idTurno e le quattro currentClassUnderTestData)
+    @GetMapping("/receiveClassUnderTest")
+    public ResponseEntity<String> receiveClassUnderTest(
+            @RequestParam("idUtente") String idUtente,
+            @RequestParam("idPartita") String idPartita,
+            @RequestParam("idTurno") String idTurno,
+            @RequestParam("nomeCUT") String nomeCUT,
+            @RequestParam("robotScelto") String robotScelto,
+            @RequestParam("difficolta") String difficolta) {
+        try {
+            // Esegui la richiesta HTTP al servizio esterno per ottenere il file
+            // ClassUnderTest.java
+            String url = "http://manvsclass-controller-1:8080/downloadFile/" + nomeCUT;
+            byte[] classUnderTest = restTemplate.getForObject(url, byte[].class);
+
+            JSONObject resp = new JSONObject();
+            String ut = new String(classUnderTest);
+            // Remove BOM Character
+            if (ut.startsWith("\uFEFF"))
+                ut = ut.substring(1);
+
+            resp.put("class", ut);
+
+            currentClassUnderTestData = new ClassUnderTestData();
+            currentClassUnderTestData.nomeCUT = nomeCUT;
+            currentClassUnderTestData.robotScelto = robotScelto;
+            currentClassUnderTestData.difficolta = difficolta;
+            // Restituisci una risposta di successo
+            return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println(e);
+            // Gestisci eventuali errori e restituisci una risposta di errore
+            return new ResponseEntity<>("Errore durante la ricezione del file ClassUnderTest.java",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
+
+
 
     private final HttpClient httpClient = HttpClientBuilder.create().build();
 
@@ -169,6 +227,7 @@ public class MyController {
     // }
     // FUNZIONE CHE DOVREBBE RICEVERE I RISULTATI DEI ROBOT
 
+    //Run per 1 VS 1
     @PostMapping("/run") // NON ESISTE NESSUN INTERFACCIA VERSO I COMPILATORI DEI ROBOT EVOSUITE E
                          // RANDOOP
     public ResponseEntity<String> runner(HttpServletRequest request) {
@@ -357,6 +416,40 @@ public class MyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/run_all") 
+    public ResponseEntity<String> runner_all(HttpServletRequest request) {
+        try {
+            RunnerHelper runnerHelper = new RunnerHelper(currentClassUnderTestData);
+            // Esegui la richiesta HTTP al servizio di destinazione
+            // RISULTATI UTENTE VERSO TASK 7
+            ScorePair userScore = runnerHelper.getUserScore(request);
+
+            URIBuilder builder = new URIBuilder("http://t4-g18-app-1:3000/robots");
+            builder.setParameter("testClassId", request.getParameter("testClassId"));
+            
+            JSONObject result = new JSONObject();
+
+            // RISULTATI ROBOT VERSO TASK4
+            if(request.getParameter("type").equals("Tutti i Robot")) {
+                result = runnerHelper.bossRushRunner(builder, userScore, request);
+            }
+            else {
+                result = runnerHelper.normalRunner(builder, userScore, request);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+    
+            return new ResponseEntity<>(result.toString(), headers, HttpStatus.OK);
+        
+        } catch (Exception e) {
+            // Gestisci eventuali errori e restituisci un messaggio di errore al client
+            System.err.println(e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PostMapping("/allenamento")
     public ResponseEntity<String> allenamento(HttpServletRequest request) {

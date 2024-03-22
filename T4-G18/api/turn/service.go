@@ -11,10 +11,11 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+	"log" //Aggiunta A16
 
 	"github.com/alarmfox/game-repository/api"
 	"github.com/alarmfox/game-repository/model"
-	"gorm.io/gorm"
+	"gorm.io/gorm" //Aggiunta A16
 )
 
 type Repository struct {
@@ -81,8 +82,32 @@ func (tr *Repository) CreateBulk(r *CreateRequest) ([]Turn, error) {
 	return resp, api.MakeServiceError(err)
 }
 
+//A16: questa funzione è stata aggiunta da A6
+func (tr *Repository) GetTurnsByAccountID(accountID string) ([]Turn, error) {
+	var turns []model.Turn
+
+	err := tr.db.
+		Model(&model.Turn{}).
+		Joins("Join players ON turns.player_id = players.id").
+		Where("players.account_id = ?", accountID).
+		Find(&turns).
+		Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp := make([]Turn, len(turns))
+	for i, turn := range turns{
+		resp[i] = fromModel(&turn)
+	}
+	return resp, nil
+}
+
 func (tr *Repository) Update(id int64, r *UpdateRequest) (Turn, error) {
 
+	//A16: la versione commentata è quella originale di A7, modificata poi da A9 con la versione non commentata scritta sotto
+	/*
 	var (
 		turn model.Turn = model.Turn{ID: id}
 		err  error
@@ -91,6 +116,28 @@ func (tr *Repository) Update(id int64, r *UpdateRequest) (Turn, error) {
 	err = tr.db.Model(&turn).Updates(r).Error
 
 	return fromModel(&turn), api.MakeServiceError(err)
+	*/
+
+	//A16: questa è la versione usata da A9
+	var turn model.Turn
+	err := tr.db.First(&turn, id).Error
+	if err != nil {
+		return Turn{}, api.MakeServiceError(err)
+	}
+
+	playerID := turn.PlayerID
+	log.Printf("Updating wins for playerID: %d", playerID)
+
+	err = tr.db.Model(&turn).Updates(r).Error
+	if err != nil {
+		return Turn{}, api.MakeServiceError(err)
+	}
+
+	if err := model.UpdatePlayerWins(tr.db, playerID); err != nil {
+		log.Printf("Error updating player wins: %v", err)
+		return Turn{}, api.MakeServiceError(err)
+	}
+	return fromModel(&turn), nil
 }
 
 func (tr *Repository) FindById(id int64) (Turn, error) {

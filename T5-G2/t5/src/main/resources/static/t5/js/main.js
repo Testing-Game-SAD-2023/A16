@@ -362,3 +362,19 @@ function redirectToPageeditor_all() {
     }
   })
 }
+
+//A16 - Integrazione per passare alla pagina di scelta della modalità di gioco
+function redirectToNewGame() {
+  window.location.href = "/new_game";
+}
+
+//A16 - Integrazione per passare alla pagina Classifica
+function redirectToClassifica(){
+	window.location.href = "/classifica";
+}
+
+//A16 - Integrazione per passare alla pagina Storico
+function redirectToStorico(){
+	window.location.href = "/storico";
+	}
+

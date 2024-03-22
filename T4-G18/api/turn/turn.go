@@ -14,9 +14,12 @@ type Turn struct {
 	UpdatedAt time.Time  `json:"updatedAt"`
 	PlayerID  int64      `json:"playerId"`
 	RoundID   int64      `json:"roundId"`
-	Scores    string     `json:"scores"`
+	Scores    string     `json:"scores"`				//A16 Considerazione: ci manca isWinner
 	StartedAt *time.Time `json:"startedAt"`
 	ClosedAt  *time.Time `json:"closedAt"`
+	TestClass string     `json:"testClass`				//aggiunto da A6 (A16)
+	Robot	  string	 `json:"robot`					//aggiunto da A6 (A16)
+	Difficulty string	 `json:"difficulty`				//aggiunto da A6 (A16)
 }
 type CreateRequest struct {
 	RoundId   int64      `json:"roundId"`
@@ -31,9 +34,12 @@ func (CreateRequest) Validate() error {
 }
 
 type UpdateRequest struct {
-	Scores    string     `json:"scores"`
+	Scores    string     `json:"scores"`				//A16 Considerazione: ci manca isWinner
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	ClosedAt  *time.Time `json:"closedAt,omitempty"`
+	TestClass string     `json:"testClass`				//aggiunto da A6 (A16)
+	Robot	  string	 `json:"robot`					//aggiunto da A6 (A16)
+	Difficulty string	 `json:"difficulty`				//aggiunto da A6 (A16)
 }
 
 func (UpdateRequest) Validate() error {
@@ -55,12 +61,15 @@ func fromModel(t *model.Turn) Turn {
 	return Turn{
 		ID:        t.ID,
 		Order:     t.Order,
-		Scores:    t.Scores,
+		Scores:    t.Scores,				//A16 Considerazione: ci manca isWinner
 		CreatedAt: t.CreatedAt,
 		UpdatedAt: t.UpdatedAt,
 		PlayerID:  t.PlayerID,
 		StartedAt: t.StartedAt,
 		ClosedAt:  t.ClosedAt,
 		RoundID:   t.RoundID,
+		TestClass: t.TestClass,				//aggiunto da A6 (A16)
+		Robot:	   t.Robot,					//aggiunto da A6 (A16)
+		Difficulty: t.Difficulty,			//aggiunto da A6 (A16)
 	}
 }

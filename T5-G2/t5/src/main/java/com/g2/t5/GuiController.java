@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import com.g2.t5.MyData; //aggiunto
 
@@ -58,6 +59,8 @@ public class GuiController {
     // private Map<Integer, String> hashMap2 = new HashMap<>();
     // private final FileController fileController;
     private RestTemplate restTemplate;
+    //private String nameAuth; //A16 aggiunta //Aggiunta A9
+    private String IdAuth;  //Aggiunta A9
 
     @Autowired
     public GuiController(RestTemplate restTemplate) {
@@ -416,5 +419,73 @@ public class GuiController {
         return "editor_all";
     }
 
+    //A16 - Integrazione di Mapping per la pagina new_game
+    @GetMapping("/new_game")
+    public String NewGamePage(Model model, @CookieValue(name = "jwt", required = false) String jwt){
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("jwt", jwt);
+
+        Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
+
+
+        if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+        return "new_game";
+    }
+
+    //A16 - Integrazione di Mapping per la pagina Classifica
+    @GetMapping("/classifica")
+    public String classificaPage(Model model, @CookieValue(name = "jwt", required = false) String jwt){
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("jwt", jwt);
+
+        Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
+        if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+
+       List<Map<String, Object>> classifica = restTemplate.getForObject("http://t4-g18-app-1:3000/players", List.class);
+       classifica.sort(Comparator.comparingInt((Map<String,Object> giocatore) -> (Integer) giocatore.get("wins")).reversed());
+        model.addAttribute("classifica", classifica);
+         
+        return "classifica";
+    }
+
+
+
+    //A16 - Integrazione di Mapping per la pagina storico
+    @GetMapping("/storico")
+    public String storicoPage(Model model, @CookieValue(required = false) String jwt){
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+        formData.add("jwt", jwt);
+
+        Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
+
+
+        if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+        
+        Integer IdTemp = restTemplate.postForObject("http://t23-g1-app-1:8080/IdToken", formData, Integer.class);
+        if(IdTemp != null){
+            IdAuth = IdTemp.toString();
+            String url ="http://t4-g18-app-1:3000/turns/account/" + IdAuth;
+            List<Map<String, Object>> storico = restTemplate.getForObject(url, List.class);
+            if(storico!=null){
+                List<Map<String, Object>> filteredStorico = storico.stream()
+                        .filter(turn -> turn.get("closedAt") != null) //filtra per escludere "closedAt" == null
+                        .sorted(Comparator.comparingInt((Map<String, Object> turn) -> (Integer) turn.get("id"))) //ordina per "id"
+                        .collect(Collectors.toList());
+                model.addAttribute("storico", filteredStorico);
+            } else{
+                System.out.println("Nessun storico ricevuto o errore nela richiesta");
+            }
+         //   storico.sort(Comparator.comparingInt((Map<String,Object> turn) -> (Integer) turn.get("id")));
+                
+            //System.out.println("ID utente: " + IdAuth);
+        }else{
+            System.out.println("ID utente non ricevuto o errore nella richiesta");
+        }
+        
+        model.addAttribute("IdAuth", IdAuth);
+      
+
+        return "storico";
+    }
 
 }

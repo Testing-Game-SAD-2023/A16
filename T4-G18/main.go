@@ -19,7 +19,7 @@ import (
 	"github.com/alarmfox/game-repository/api/robot"
 	"github.com/alarmfox/game-repository/api/round"
 	"github.com/alarmfox/game-repository/api/turn"
-	//A16 - "github.com/alarmfox/game-repository/api/player"
+	"github.com/alarmfox/game-repository/api/player"
 	"github.com/alarmfox/game-repository/limiter"
 	"github.com/alarmfox/game-repository/model"
 	"github.com/go-chi/chi/v5"
@@ -173,6 +173,9 @@ func run(ctx context.Context, c Configuration) error {
 
 			// robot endpoint
 			robotController = robot.NewController(robot.NewRobotStorage(db))
+
+			//A16: aggiunta a partire da A6
+			playerController = player.NewController(player.NewRepository(db))
 		)
 
 		r.Mount(c.ApiPrefix, setupRoutes(
@@ -180,6 +183,7 @@ func run(ctx context.Context, c Configuration) error {
 			roundController,
 			turnController,
 			robotController,
+			playerController, 					//A16: aggiunta a partire da A6
 		))
 	})
 	log.Printf("listening on %s", c.ListenAddress)
@@ -304,7 +308,9 @@ func makeDefaults(c *Configuration) {
 
 }
 
-func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller) *chi.Mux {
+//A16: modificata la funzione qui sotto, originariamente la definizione della funzione era la seguente:
+// func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller) *chi.Mux {
+func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller, pc *player.Controller) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(api.WithMaximumBodySize(api.DefaultBodySize))
@@ -353,6 +359,10 @@ func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller,
 		// Get turn
 		r.Get("/{id}", api.HandlerFunc(tc.FindByID))
 
+		//A16: aggiunto questo Get turn da A6
+		// Get turn
+		r.Get("/account/{accountID}", api.HandlerFunc(tc.ListByAccount))
+
 		// List turn
 		r.Get("/", api.HandlerFunc(tc.List))
 
@@ -389,16 +399,14 @@ func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller,
 
 	})
 
-	/*	A16 - PAPPONE SCHIATTA
+	//A16: aggiunta da A6
 	r.Route("/players", func(r chi.Router){
 		
-
 		// List player
 		r.Get("/", api.HandlerFunc(pc.ListPlayers))
 		// Update player
 		r.With(middleware.AllowContentType("application/json")).
 			Put("/{accountId}", api.HandlerFunc(pc.Update))
 	})
-*/
 	return r
 }

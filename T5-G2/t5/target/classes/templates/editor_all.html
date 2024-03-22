@@ -767,7 +767,7 @@ public class TestClasse {
         //     }
         //   });
         // });
-        //document.getElementById('loading-editor').style.display = 'block'; //A16 - aggiungere per creare schermata di caricamento
+        System.out.println("Capocchia");
         $(document).ready(function() {
           if(localStorage.getItem("gameId") == "null") { //controllo game invece che turn
             alert("Impossibile effettuare un nuovo tentativo: Hai già vinto!");
@@ -790,7 +790,7 @@ public class TestClasse {
             formData.append("order", orderTurno);
             formData.append("username", localStorage.getItem("username"));
             $.ajax({
-              url: "http://localhost/api/run", // con questa verso il task 6, si salva e conclude la partita e si decreta il vincitore
+              url: "/api/run_all", // con questa verso il task 6, si salva e conclude la partita e si decreta il vincitore
               type: "POST",
               data: formData,
               processData: false,
@@ -893,7 +893,7 @@ public class TestClasse {
                   //console.log(localStorage.getItem("turnId"));
 
                   $.ajax({
-                    url:'http://localhost/api/save-data',
+                    url:'/api/save-data',
                     data: {
                       playerId: parseJwt(getCookie("jwt")).userId,
                       classe: localStorage.getItem("classe"),
@@ -933,7 +933,7 @@ public class TestClasse {
             var test = '/VolumeT8/FolderTreeEvo/Tests/' + localStorage.getItem("turnId");
 
             // Definisci il percorso dell'API
-            var apiBaseUrl = 'http://localhost:3080/api/';
+            var apiBaseUrl = '/api/';
 
             // Concatena il percorso della classe al percorso dell'API
             var url = apiBaseUrl + classe + '+' + test + '+/app';

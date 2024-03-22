@@ -1,0 +1,330 @@
+package com.example.T6;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpServerErrorException;
+
+import com.example.T6.MyController.ClassUnderTestData;
+
+import org.json.JSONObject;
+import org.apache.http.client.utils.URIBuilder;
+
+public class RunnerHelper {
+    
+    public class ScorePair {
+        private String outCompile;
+        private String xmlString;
+        private int score;
+    
+        public ScorePair(String outCompile, String xmlString, int score) {
+            this.outCompile = outCompile;
+            this.xmlString = xmlString;
+            this.score = score;
+        }
+        public String getOutCompile() {
+            return outCompile;
+        }
+        public String getXmlString() {
+            return xmlString;
+        }
+        public int getScore() {
+            return score;
+        }
+    }
+
+    private ClassUnderTestData currentClassUnderTestData;
+
+    public final HttpClient httpClient = HttpClientBuilder.create().build();
+
+    public RunnerHelper(ClassUnderTestData currentClassUnderTestData) {
+        this.currentClassUnderTestData = currentClassUnderTestData;
+    }
+
+    public ScorePair getUserScore(HttpServletRequest request) throws ClientProtocolException, IOException {
+        HttpPost httpPost = new HttpPost("http://remoteccc-app-1:1234/compile-and-codecoverage");
+    
+        // passa un oggetto JSON con il nome della classe da testare e di testing e il loro codice
+        JSONObject obj = new JSONObject();
+        obj.put("testingClassName", request.getParameter("testingClassName"));
+        obj.put("testingClassCode", request.getParameter("testingClassCode"));
+        obj.put("underTestClassName", request.getParameter("underTestClassName"));
+        obj.put("underTestClassCode", request.getParameter("underTestClassCode"));
+    
+        StringEntity jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
+    
+        httpPost.setEntity(jsonEntity);
+    
+        HttpResponse response = httpClient.execute(httpPost);
+    
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode > 299) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore di compile-coverage)");
+        }
+    
+        // entity contiene il corpo della risposta contenente la coverage del giocatore
+        HttpEntity entity = response.getEntity();
+    
+        // trasforma la risposta in stringa e crea un oggetto JSON con la risposta,
+        // sempre contenente la coverage del giocatore 
+        String responseBody = EntityUtils.toString(entity);
+        JSONObject responseObj = new JSONObject(responseBody);
+    
+        String xmlString = responseObj.getString("coverage");
+        String outCompile = responseObj.getString("outCompile");
+        // PRESA DELLO SCORE UTENTE
+        // percentuale di coverage dell'utente trasformata in intero
+        return new ScorePair(outCompile, xmlString, ParseUtil.LineCoverage(xmlString));
+    }
+
+    public JSONObject normalRunner(URIBuilder builder, ScorePair userScore, HttpServletRequest request) 
+        throws ClientProtocolException, IOException, URISyntaxException {
+        int roboScore = roboScoreNormalGet(builder, request);
+    
+        JSONObject result = responseBuilderNormal(roboScore, userScore);
+        saving(result, request, "classic");
+        return result;
+    }
+
+    public int roboScoreNormalGet(URIBuilder builder, HttpServletRequest request) throws 
+        URISyntaxException, ClientProtocolException, IOException {
+        builder.setParameter("type", request.getParameter("type"));
+        builder.setParameter("difficulty", request.getParameter("difficulty"));
+    
+        HttpGet get = new HttpGet(builder.build());
+        HttpResponse response = httpClient.execute(get);
+        get.releaseConnection();
+        // Verifica lo stato della risposta
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode > 299) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore in robots" + 
+                " " + request.getParameter("robot"));
+        }
+    
+        // Leggi il contenuto dalla risposta
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        JSONObject responseObj = new JSONObject(responseBody);
+    
+        String score = responseObj.getString("scores");
+        Integer roboScore = Integer.parseInt(score);
+    
+        return roboScore.intValue();
+    }
+
+    public JSONObject responseBuilderNormal(int roboScore, ScorePair userScore) {
+        JSONObject result = new JSONObject();
+        boolean winnormal = false;
+
+        if(userScore.getScore() >= roboScore)
+            winnormal = true;
+        else
+            winnormal = false;
+    
+        result.put("outCompile", userScore.getOutCompile());
+        result.put("coverage", userScore.getXmlString());
+        result.put("win", String.valueOf(winnormal));
+        result.put("robotScore", roboScore);
+        result.put("score", String.valueOf(userScore.getScore()));
+    
+        return result;
+    }
+
+    public JSONObject bossRushRunner(URIBuilder builder, ScorePair userScore, HttpServletRequest request) throws 
+            ClientProtocolException, IOException, ParseException, URISyntaxException {
+        List<Integer> randoopScores = roboScoresBossRushGet(builder, "randoop");
+        List<Integer> evosuiteScores = roboScoresBossRushGet(builder, "evosuite");
+    
+        JSONObject result = responseBuilderBossRush(randoopScores, evosuiteScores, userScore);
+
+        saving(result, request, "bossRush");
+
+        return result;
+    }
+
+    public List<Integer> roboScoresBossRushGet(URIBuilder builder, String type) throws 
+            URISyntaxException, ParseException, IOException {
+        URIBuilder helper = builder;
+        helper.setParameter("type", type);
+
+        List<Integer> robot = new ArrayList<>();
+        HttpResponse response; 
+        for(int i = 1; i < 11; i++) {
+            URIBuilder subHelper = helper;
+            subHelper.setParameter("difficulty", String.valueOf(i));
+    
+            HttpGet get = new HttpGet(subHelper.build());
+            try {
+                response = httpClient.execute(get);
+                get.releaseConnection();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode > 299) {
+                    break;
+                }
+            } catch (Exception e) {
+                throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore in " + type + " " + i);
+            }
+
+            HttpEntity entity = response.getEntity();
+            String responseBody = EntityUtils.toString(entity);
+            JSONObject responseObj = new JSONObject(responseBody);
+    
+            String score = responseObj.getString("scores");
+            Integer roboScore = Integer.parseInt(score);
+            robot.add(roboScore);
+        }
+
+        return robot;
+    }
+
+    public JSONObject responseBuilderBossRush(List<Integer> randoopScores, List<Integer> evosuiteScores, ScorePair userScore) {
+        JSONObject result = new JSONObject();
+    
+        int i = 0;
+        boolean globalWin = false;
+    
+        int numberOfBeaten = 0;
+        int numberOfUnbeaten = 0;
+        for(i = 0; i < randoopScores.size(); i++) {
+            if(randoopScores.get(i) <= userScore.getScore()) { 
+                result.put("beaten"+String.valueOf(numberOfBeaten+1), String.valueOf(i+1) + "&" + String.valueOf(randoopScores.get(i)));
+                numberOfBeaten++;
+            }
+            else{
+                result.put("unbeaten"+String.valueOf(numberOfUnbeaten+1), String.valueOf(i+1) + "&" + String.valueOf(randoopScores.get(i)));
+                numberOfUnbeaten++;
+            }
+        }
+    
+        for(i = 0; i < evosuiteScores.size(); i++) {
+            if(evosuiteScores.get(i) <= userScore.getScore()) { 
+                result.put("beaten"+String.valueOf(numberOfBeaten+1), String.valueOf(i+1+randoopScores.size()) + "&" + String.valueOf(evosuiteScores.get(i)));
+                numberOfBeaten++;
+            }
+            else{
+                result.put("unbeaten"+String.valueOf(numberOfUnbeaten+1), String.valueOf(i+1+randoopScores.size()) + "&" + String.valueOf(evosuiteScores.get(i)));
+                numberOfUnbeaten++;
+            }
+        }
+    
+        if(numberOfBeaten == randoopScores.size() + evosuiteScores.size())
+            globalWin = true;
+    
+        result.put("outCompile", userScore.getOutCompile());
+        result.put("coverage", userScore.getXmlString());
+        result.put("score", String.valueOf(userScore.getScore()));
+        result.put("win", String.valueOf(globalWin));
+        result.put("numberOfBeaten", String.valueOf(numberOfBeaten));
+        result.put("numberOfUnbeaten", String.valueOf(numberOfUnbeaten));
+    
+        return result;
+    }
+    
+    
+    
+    public void saving(JSONObject result, HttpServletRequest request, String mode) throws ClientProtocolException, IOException {
+        // conclusione e salvataggio partita
+        // chiusura turno con vincitore
+
+        //-----------------Aggiunta A9---------------
+        String nomeCUT = currentClassUnderTestData.nomeCUT;
+        String robotScelto = currentClassUnderTestData.robotScelto;
+        String difficolta = currentClassUnderTestData.difficolta;
+        //-----------------Aggiunta A9---------------
+
+        HttpPut httpPut = new HttpPut("http://t4-g18-app-1:3000/turns/" + String.valueOf(request.getParameter("turnId")));
+    
+        JSONObject obj = new JSONObject();
+
+        if(mode.equals("bossRush")) {
+            int numberOfBeaten = Integer.parseInt(result.getString("numberOfBeaten"));
+            int numberOfUnbeaten = Integer.parseInt(result.getString("numberOfUnbeaten"));
+            String s = result.getString("score") + "(" + String.valueOf(numberOfBeaten) + "/" + String.valueOf(numberOfBeaten + numberOfUnbeaten) + ")";
+            obj.put("scores", s);
+        }
+        else 
+            obj.put("scores", result.getString("score"));
+
+        String win = result.getString("win");
+        obj.put("isWinner", Boolean.parseBoolean(win));
+    
+        String time = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+        obj.put("closedAt", time);
+        obj.put("testClass", nomeCUT);
+        obj.put("robot", robotScelto);
+        obj.put("difficulty", difficolta);
+
+        StringEntity jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
+    
+        httpPut.setEntity(jsonEntity);
+        
+        HttpResponse response = httpClient.execute(httpPut);
+        httpPut.releaseConnection();
+
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode > 299) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore in put turn");
+        }
+
+        // chiusura round
+        httpPut = new HttpPut("http://t4-g18-app-1:3000/rounds/" + String.valueOf(request.getParameter("roundId")));
+    
+        obj = new JSONObject();
+    
+        obj.put("closedAt", time);
+    
+        jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
+    
+        httpPut.setEntity(jsonEntity);
+    
+        response = httpClient.execute(httpPut);
+        httpPut.releaseConnection();
+    
+        statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode > 299) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore in put round");
+        }
+
+        // chiusura gioco
+        httpPut = new HttpPut("http://t4-g18-app-1:3000/games/" + String.valueOf(request.getParameter("gameId")));
+    
+        obj = new JSONObject();
+        obj.put("closedAt", time);
+    
+        jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
+    
+        httpPut.setEntity(jsonEntity);
+    
+        response = httpClient.execute(httpPut);
+        httpPut.releaseConnection();
+        
+        statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode > 299) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore in put game");
+        }
+    
+    }
+    
+
+}
