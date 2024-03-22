@@ -417,6 +417,7 @@ public class MyController {
         }
     }
 
+    //A16 - Integrazione da A6 per sfidare tutti i robot
     @PostMapping("/run_all") 
     public ResponseEntity<String> runner_all(HttpServletRequest request) {
         try {
