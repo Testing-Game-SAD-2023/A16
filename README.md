@@ -1,9 +1,8 @@
-# Gruppo A7-2024
+# Gruppo A16-2024
 Componenti:
-- Simone Rinaldi - M63/1654
-- Lorenza Pezzullo - M63/1671
-- Giuseppe Imparato - M63/
-- Giada Ottaiano - M63/1640
+- Antonio Bocchetti - M63/1259
+- Gianluigi Erra - M63/1261
+- Stefano Violante - M63/1263
   
 # Guida all'installazione
 
