@@ -370,11 +370,13 @@ function redirectToNewGame() {
 
 //A16 - Integrazione per passare alla pagina Classifica
 function redirectToClassifica(){
-	window.location.href = "/classifica";
+	window.location.href = "/ranking";
 }
 
 //A16 - Integrazione per passare alla pagina Storico
 function redirectToStorico(){
+  alert("Sono in redirectToStorico");
+  console.log("Sono in redirectToStorico");
 	window.location.href = "/storico";
 	}
 

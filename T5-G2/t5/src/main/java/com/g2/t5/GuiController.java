@@ -433,8 +433,8 @@ public class GuiController {
     }
 
     //A16 - Integrazione di Mapping per la pagina Classifica
-    @GetMapping("/classifica")
-    public String classificaPage(Model model, @CookieValue(name = "jwt", required = false) String jwt){
+    @GetMapping("/ranking")
+    public String rankingPage(Model model, @CookieValue(name = "jwt", required = false) String jwt){
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
         formData.add("jwt", jwt);
 
@@ -445,7 +445,7 @@ public class GuiController {
        classifica.sort(Comparator.comparingInt((Map<String,Object> giocatore) -> (Integer) giocatore.get("wins")).reversed());
         model.addAttribute("classifica", classifica);
          
-        return "classifica";
+        return "ranking";
     }
 
 
