@@ -335,6 +335,52 @@ public class Controller {
 
     /* GET PER LE VIEW */
 
+    //-------------------------------------A16 - AGGIUNTA DA A6----------------------------
+     public String extractName(String jwt){
+        try{
+            Claims c = Jwts.parser().setSigningKey("mySecretKey").parseClaimsJws(jwt).getBody();
+            return c.get("name", String.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/nameToken")
+    public ResponseEntity<String> extractNameToken(@RequestParam("jwt") String jwt) {
+        String name = extractName(jwt);
+        if (name != null) {
+            return ResponseEntity.ok(name);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossibile estrarre il nome dal token.");
+        }
+    }
+
+    //Funzione per l'estrazione dell'ID dal Token
+    public Integer extractIDString(String jwt){
+        try{
+            Claims c = Jwts.parser().setSigningKey("mySecretKey").parseClaimsJws(jwt).getBody();
+            return c.get("userId", Integer.class);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //endpoint per estrarre l'ID dal Token (A16 - VIENE CHIAMATO DA STORICO)
+    @PostMapping("/IdToken")
+    public ResponseEntity<String> extractIdToken(@RequestParam("jwt") String jwt) {
+        Integer userId = extractIDString(jwt);
+        if (userId != null) {
+            return ResponseEntity.ok(userId.toString());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossibile estrarre l'Id dal token.");
+        }
+    }
+ //-------------------------------------A16 - AGGIUNTA DA A6----------------------------
+
+
+
     public boolean isJwtValid(String jwt) {
         try {
             Claims c = Jwts.parser().setSigningKey("mySecretKey").parseClaimsJws(jwt).getBody();

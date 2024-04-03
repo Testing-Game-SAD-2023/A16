@@ -9,6 +9,7 @@ import (
 
 type Turn struct {
 	ID        int64      `json:"id"`
+	IsWinner  bool       `json:"isWinner"` //A16 - AGGIUNTO DA A6
 	Order     int	     `json:"order"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
@@ -35,6 +36,7 @@ func (CreateRequest) Validate() error {
 
 type UpdateRequest struct {
 	Scores    string     `json:"scores"`				//A16 Considerazione: ci manca isWinner
+	IsWinner  bool       `json:"isWinner"`	//A16 - AGGIUNTO DA A6
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	ClosedAt  *time.Time `json:"closedAt,omitempty"`
 	TestClass string     `json:"testClass`				//aggiunto da A6 (A16)
@@ -60,6 +62,7 @@ func (k KeyType) AsInt64() int64 {
 func fromModel(t *model.Turn) Turn {
 	return Turn{
 		ID:        t.ID,
+		IsWinner:  t.IsWinner,		//A16 - AGGIUNTO DA A6
 		Order:     t.Order,
 		Scores:    t.Scores,				//A16 Considerazione: ci manca isWinner
 		CreatedAt: t.CreatedAt,
