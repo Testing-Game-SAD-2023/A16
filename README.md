@@ -3,6 +3,7 @@ Componenti:
 - Antonio Bocchetti - M63/1259
 - Gianluigi Erra - M63/1261
 - Stefano Violante - M63/1263
+- Antonio Savino - M63/1318
   
 # Guida all'installazione
 
