@@ -786,7 +786,7 @@ public class TestClasse {
             formData.append("difficulty", localStorage.getItem("difficulty"));
             formData.append("type", localStorage.getItem("robot")); // modificato
             //Seguenti due righe aggiunte da A16
-            formData.append("order", orderTurno);
+            //formData.append("order", orderTurno);
             formData.append("username", localStorage.getItem("username"));
             $.ajax({
               url: "/api/run_all", // con questa verso il task 6, si salva e conclude la partita e si decreta il vincitore

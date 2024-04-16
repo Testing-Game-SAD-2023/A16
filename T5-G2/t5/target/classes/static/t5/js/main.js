@@ -375,8 +375,6 @@ function redirectToClassifica(){
 
 //A16 - Integrazione per passare alla pagina Storico
 function redirectToStorico(){
-  alert("Sono in redirectToStorico");
-  console.log("Sono in redirectToStorico");
 	window.location.href = "/storico";
 	}
 

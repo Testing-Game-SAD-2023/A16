@@ -38,6 +38,13 @@ zuul:
       sensitiveHeaders:
       path: /api/run/**
       url: http://t6-g12-app-1:80/run
+    ##INTEGRAZIONE A16 RUN ALL API
+    run_all-service:
+      sensitiveHeaders:
+      path: /api/run_all/**
+      url: http://t6-g12-app-1:80/run_all
+    ##
+    
     allenamento-service:
       sensitiveHeaders:
       path: /api/allenamento/**
