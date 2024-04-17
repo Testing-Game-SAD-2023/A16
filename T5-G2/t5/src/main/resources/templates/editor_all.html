@@ -891,13 +891,15 @@ public class TestClasse {
                   //localStorage.setItem("turnId",(parseInt(localStorage.getItem("turnId"))+1).toString()); // vedere che fare
                   //console.log(localStorage.getItem("turnId"));
 
+                  console.log("SONO QUI RIGA 894 EDITOR_ALL");
                   $.ajax({
                     url:'/api/save-data',
                     data: {
                       playerId: parseJwt(getCookie("jwt")).userId,
                       classe: localStorage.getItem("classe"),
                       robot: localStorage.getItem("robot"),
-                      difficulty: localStorage.getItem("difficulty")
+                      difficulty: localStorage.getItem("difficulty"),
+                      username: localStorage.getItem("username") //A16 - passiamo a save-data "username"(mancava in A6 ma è richiesto in A7)
                     },
                     type:'POST',
                     success: function (response) {
@@ -916,7 +918,8 @@ public class TestClasse {
                       // Gestisci l'errore qui
                     }
                   });
-
+                  
+                  console.log("SONO QUI RIGA 921 EDITOR_ALL");
                 }
               },
               error: function() {

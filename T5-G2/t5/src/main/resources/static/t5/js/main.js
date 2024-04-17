@@ -197,6 +197,7 @@ function redirectToPageeditor() {
     });
   } 
   else {
+    console.log("SONO QUI RIGA 200 MAIN.JS");
     $.ajax({
       url: '/api/save-data',
       data: {
@@ -224,6 +225,7 @@ function redirectToPageeditor() {
       }
 
     })
+    console.log("SONO QUI RIGA 228 MAIN.JS");
   }
 
    /* //A16 - Aggiunto per integrare 1 VS ALL
@@ -336,6 +338,7 @@ function redirectToAllRobots() {
 
 //A16 - Integrazione
 function redirectToPageeditor_all() {
+  console.log("SONO QUI RIGA 341 MAIN.JS");
   $.ajax({
     url:'/api/save-data',
     data: {
@@ -361,6 +364,7 @@ function redirectToPageeditor_all() {
       // Gestisci l'errore qui
     }
   })
+  console.log("SONO QUI RIGA 367 MAIN.JS");
 }
 
 //A16 - Integrazione per passare alla pagina di scelta della modalità di gioco
