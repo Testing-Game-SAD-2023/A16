@@ -355,7 +355,7 @@ function redirectToPageeditor_all() {
       localStorage.setItem("turnId", response.turn_id);
       localStorage.setItem("roundId", response.round_id);
       localStorage.setItem("orderTurno", "1");
-      window.location.href = "/editor_all";
+      window.location.href = "/editor_all";//A16
     },
     dataType: "json",
     error: function (error) {
