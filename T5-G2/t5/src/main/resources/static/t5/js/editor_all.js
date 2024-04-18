@@ -131,7 +131,7 @@
         });
         */
 
-        //A16 - STORICO NELLA SINTASSI CHE USANO A7
+        //A16 - STORICO NELLA SINTASSI CHE USA A7
       var storico = $("#storico");
 storico.on("click", function() {
   $("#loading-editor").css("display", "block");
