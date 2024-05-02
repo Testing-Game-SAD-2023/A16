@@ -91,14 +91,6 @@ Occasionalmente, anche dopo che tutti i container sono stati avviati con success
 
 # Video Dimostrativi
 
-Di seguito riportiamo i video dimostrativi delle due modalità di gioco attualmente disponibili.
-
-## Funzionamento Modalità "Sfida un Robot"
-
-https://github.com/SimoneRinaldi02/A7-2024-ver2/assets/115701124/89f519e5-796b-4883-8826-681a0980f16e
-
-## Funzionamento Modalità "Allenamento"
-
 https://github.com/SimoneRinaldi02/A7-2024-ver2/assets/115701124/f99ea16d-caf9-451f-9604-99f5ff2b0960
 
 
