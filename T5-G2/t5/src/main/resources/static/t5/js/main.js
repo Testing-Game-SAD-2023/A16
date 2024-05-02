@@ -319,6 +319,7 @@ function redirectToPageReport1(){
   if(classe){
     localStorage.setItem("classe", classe);
     localStorage.setItem("robot", "Tutti i Robot");
+    localStorage.setItem("difficulty", "MAX");             //A16 aggiunta per mettere nel localstorage anche la difficulty
     window.location.href = "/report1";
   }
   else {

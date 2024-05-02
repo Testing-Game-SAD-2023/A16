@@ -152,7 +152,7 @@ public class GuiController {
         if (isAuthenticated == null || !isAuthenticated)
             return "redirect:/login";
 
-        nameAuth = restTemplate.postForObject("http://t23-g1-app-1:8080/nameToken", formData, String.class);
+        nameAuth = restTemplate.postForObject("http://t23-g1-app-1:8080/nameToken", formData, String.class);                        //A16 aggiunta per ottenere il nome
 
         List<ClassUT> classes = getClasses();
 
@@ -351,6 +351,8 @@ public class GuiController {
         Boolean isAuthenticated = restTemplate.postForObject("http://t23-g1-app-1:8080/validateToken", formData, Boolean.class);
 
         if(isAuthenticated == null || !isAuthenticated) return "redirect:/login";
+
+        nameAuth = restTemplate.postForObject("http://t23-g1-app-1:8080/nameToken", formData, String.class);                //A16 aggiunta per ottenere il nome in All_robots
 
         List<ClassUT> classes = getClasses();
 
