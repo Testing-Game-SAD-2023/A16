@@ -2,8 +2,8 @@
 Componenti:
 - Antonio Bocchetti - M63/1259
 - Gianluigi Erra - M63/1261
+- Antonio Savino - M63/1318
 - Stefano Violante - M63/1263
-- Antonio Savino - M63/1318 
   
 # Guida all'installazione
 
@@ -91,5 +91,10 @@ Occasionalmente, anche dopo che tutti i container sono stati avviati con success
 
 # Video Dimostrativi
 
+# Modalità "Sfida un Robot"
 
 
+# Modalità "Sfida tutti i Robot"
+
+
+# Modalità "Allenamento"
