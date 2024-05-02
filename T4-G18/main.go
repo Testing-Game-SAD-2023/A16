@@ -1,3 +1,4 @@
+//MODIFICATO
 package main
 
 import (
@@ -310,7 +311,7 @@ func makeDefaults(c *Configuration) {
 
 //A16: modificata la funzione qui sotto, originariamente la definizione della funzione era la seguente:
 // func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller) *chi.Mux {
-func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller, pc *player.Controller) *chi.Mux {
+	func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller, roc *robot.Controller, pc *player.Controller) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(api.WithMaximumBodySize(api.DefaultBodySize))
@@ -398,7 +399,7 @@ func setupRoutes(gc *game.Controller, rc *round.Controller, tc *turn.Controller,
 		r.Delete("/", api.HandlerFunc(roc.Delete))
 
 	})
-
+	
 	//A16: aggiunta da A6
 	r.Route("/players", func(r chi.Router){
 		

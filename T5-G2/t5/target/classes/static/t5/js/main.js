@@ -1,3 +1,4 @@
+//MODIFICATO
 //variabili per la selezione della classe e del robot
 var classe = null;
 var robot = null;
@@ -30,13 +31,33 @@ const parseJwt = (token) => {
 };
 
 document.addEventListener("DOMContentLoaded", (e) => {
-  document.getElementById("usernameField").innerText = parseJwt(getCookie("jwt")).sub;
-});
+  //QUESTA RIGA ERA IL CODICE ORIGINALE DI A7
+  //document.getElementById("usernameField").innerText = parseJwt(getCookie("jwt")).sub;
+   
+  // AGGIUNTA A16 presa da A6
+   const jwtData = parseJwt(getCookie("jwt"));
+   console.log("jwtData: ");
+   console.dir(jwtData);
 
+   if(jwtData){
+    const usernameField = document.getElementById("usernameField");
+    usernameField.innerText = jwtData.sub; //getEmail()
+    console.log("usernameField: "+ usernameField.innerText);
+
+    const nameField = document.getElementById("nameField");
+    if (jwtData.name){
+      nameField.innerText = jwtData.name;
+    }else {
+      nameField.innerText = "Nome non disponibile";
+    }
+  }
+ // FINE AGGIUNTA
+
+});
 
 function selectGameMode(mode) {
   console.log("Modalità selezionata:", mode);
-  localStorage.setItem("modalita", mode); //A16 - In locale salvo la modalita' che ho scelto
+  localStorage.setItem("modalita", mode);
 
   // Verifica la modalità selezionata
   if (mode === "Sfida un Robot" || mode === "Allenamento") {
@@ -45,12 +66,12 @@ function selectGameMode(mode) {
   }
 
   //A16 - Integrazione 1 VS ALL
-  if (mode === "Sfida tutti i Robot") {
+  else if (mode === "Sfida tutti i Robot") {
     // Redirect alla pagina per giocare contro TUTTI i Robot
     window.location.href = "/all_robots";
   }
 
-  if (mode === "Multiplayer") {
+   else if (mode === "Multiplayer") {
     // Avvisa l'utente che questa modalità non è ancora disponibile
     alert("La modalità " + mode + " non è ancora disponibile. Arriverà presto!");
   }
@@ -195,8 +216,8 @@ function redirectToPageeditor() {
         console.error("Errore durante la rimozione delle cartelle di allenamento:", errorThrown);
       }
     });
-  } 
-  else {
+
+  } else {
     console.log("SONO QUI RIGA 200 MAIN.JS");
     $.ajax({
       url: '/api/save-data',
@@ -227,32 +248,6 @@ function redirectToPageeditor() {
     })
     console.log("SONO QUI RIGA 228 MAIN.JS");
   }
-
-   /* //A16 - Aggiunto per integrare 1 VS ALL
-    $.ajax({
-      url:'http://localhost/api/save-data',
-      data: {
-        playerId: parseJwt(getCookie("jwt")).userId,
-        classe: classe,
-        robot: robot,
-        difficulty: difficulty
-      },
-      type:'POST',
-      success: function (response) {
-        // Gestisci la risposta del server qui
-        localStorage.setItem("gameId", response.game_id);
-        localStorage.setItem("turnId", response.turn_id);
-        localStorage.setItem("roundId", response.round_id);
-        window.location.href = "/editor_all";
-      },
-      dataType: "json",
-      error: function (error) {
-        console.error('Errore nell invio dei dati');
-        alert("Dati non inviati con successo");
-        // Gestisci l'errore qui
-      }
-    })*/
-  
 }
 
 // Funzione per gestire il click sul bottone di download
@@ -312,7 +307,8 @@ function saveLoginData() {
 
   username = username.toString();
 
-  localStorage.setItem("username", username); //A16 - Nello Store Locale salvo l'username di colui che si è loggato (non so perchè si ripete anche in main.html)
+  localStorage.setItem("username", username);
+
 
   console.log("username :", username);
 }

@@ -78,11 +78,13 @@ const server = http.createServer((req, res) => {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Pagina non trovata');
     }*/
-
-    else if (req.url.startsWith('/tests/')) {
+    //16 modifca per editorAllenamento
+    else if (req.url.startsWith('/Allenamento/')) {           //A16 al posto di Allenamento c'era "tests"
         res.setHeader('Access-Control-Allow-Origin', '*');
 
         const path = req.url.split('/').slice(2); // Rimuovi il primo elemento vuoto e "/tests/"
+
+
         let testPath;
         console.log(path);
 
@@ -112,6 +114,33 @@ const server = http.createServer((req, res) => {
                 res.end(data);
             }
         });
+    }
+   //A16 aggiunta per editor 1v1 e 1vALL
+    else if (req.url.startsWith('/tests/')) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+    
+            const path = req.url.split('/').slice(2); // Rimuovi il primo elemento vuoto e "/tests/"
+    
+        if (path.length >= 2) {
+            const numero = path[0];
+            const nome = path[1];
+            console.log(`Valore di "numero": ${numero}, Valore di "nome": ${nome}`);
+
+            const testPath = '/VolumeT8/FolderTreeEvo/Tests/' + numero + '/' + nome +'.java';
+            fs.readFile(testPath, (err, data) => {
+                if (err) {
+                    res.statusCode = 500;
+                    res.end('Errore nel leggere il file Java');
+                } else {
+                    res.setHeader('Content-Disposition', 'attachment; filename=yourfile.java');
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end(data);
+                }
+            });
+        } else {
+            console.log('Percorso della richiesta non contiene numero e nome');
+        }
+
     } else if (req.url.startsWith('/remove-allenamento')) {
         // Rimozione delle cartelle
         const pathToDelete = '/VolumeT8/FolderTreeEvo/Allenamento';

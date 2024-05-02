@@ -1,3 +1,4 @@
+      //MODIFICATO
       var turno = 0; // numero di turni giocati fino ad ora
       var orderTurno = 0; //A16 - AGGIUNTO DA A7
       var perc_robot = '0'; // percentuale di copertura del robot scelto
@@ -59,7 +60,6 @@
         });
       });
 
-      /*
         //funzione handler del tasto di storico
         var storico = document.getElementById("storico");
         storico.addEventListener("click", function(){
@@ -129,64 +129,7 @@
             fetchTurns(turno);
           }
         });
-        */
-
-        //A16 - STORICO NELLA SINTASSI CHE USANO A7
-      var storico = $("#storico");
-storico.on("click", function() {
-  $("#loading-editor").css("display", "block");
-
-  if (orderTurno == 0) {
-    alert("Non esiste ancora uno storico dei test");
-    $("#loading-editor").css("display", "none");
-  } else if (localStorage.getItem("gameId") === "null") {
-    alert("Impossibile accedere allo storico. La partita è terminata");
-    $("#loading-editor").css("display", "none");
-  } else {
-    $("#loading-editor").css("display", "none");
-    var dastampare = "";
-
-    async function fetchTurns(turno) {
-      for (var i = orderTurno; i >= 1; i--) {
-        try {
-          let response = await $.ajax({
-            url: "/turns/" + (parseInt(localStorage.getItem("turnId")) - i + 1).toString(),
-            method: 'GET',
-            dataType: 'json',
-          });
-
-          dastampare += "Turno " + Math.abs(i - orderTurno - 1).toString() + "\n" + "Percentuale di copertura ottenuta: " + response.scores + "\n";
-          console.log(response.scores);
-
-        } catch (error) {
-          console.error('Error:', error);
-        }
-
-        try {
-          let response = await $.ajax({
-            url: "/tests/Game" + localStorage.getItem("gameId") + '/Round' + localStorage.getItem("roundId") + '/Turn' + Math.abs(i - orderTurno - 1).toString() + '/' + localStorage.getItem("classe"),
-            method: 'GET',
-            dataType: 'text',
-          });
-
-          dastampare += "Codice di test sottoposto al tentativo " + Math.abs(i - orderTurno - 1).toString() + ":\n" + response + "\n\n";
-
-        } catch (error) {
-          console.error('Error:', error);
-        }
-
-        // Printing separator
-        dastampare += "-----------------------------------------------------------------------------\n\n";
-      }
-
-      consoleArea.setValue(dastampare);
-      console.log(dastampare);
-    }
-
-    fetchTurns(orderTurno);
-  }
-});
-
+        
       //esecuzione ricevendo XML da T7 e mandando partita a T4
       var runButton = document.getElementById("runButton");
       runButton.addEventListener("click", function() {

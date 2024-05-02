@@ -8,6 +8,8 @@ $(document).ready(function () {
     var nameCUT = localStorage.getItem("classe");
     var robotScelto = localStorage.getItem("robot");
     var difficolta = localStorage.getItem("difficulty");
+    var idTurno = localStorage.getItem("turnId");                           //A16 aggiunto
+    var idPartita = localStorage.getItem("gameId");                         //A16 aggiunto
 
     if (idUtente == null || nameCUT == null || robotScelto == null) window.location.href = "/main";
 
@@ -18,7 +20,9 @@ $(document).ready(function () {
             idUtente: idUtente,
             nomeCUT: nameCUT,
             robotScelto: robotScelto,
-            difficolta: difficolta
+            difficolta: difficolta,
+            idTurno: idTurno,
+            idPartita: idPartita
         },
         dataType: "text",
         success: function (response) {
@@ -50,7 +54,7 @@ storico.addEventListener("click", function () {
 
                 try {
                     let response = await $.ajax({
-                        url: "/tests/Test" + Math.abs(i - turno - 1).toString() + "/" + localStorage.getItem("classe"),
+                        url: "/Allenamento/Test" + Math.abs(i - turno - 1).toString() + "/" + localStorage.getItem("classe"),                         //A16 al posto di Allenamento c'era tests
                         method: 'GET',
                         dataType: 'text',
                     });
@@ -90,7 +94,7 @@ runButton.addEventListener("click", function () {
     formData.append("playerId", String(parseJwt(getCookie("jwt")).userId));
     formData.append("testClassId", localStorage.getItem("classe"));
     formData.append("difficulty", localStorage.getItem("difficulty"));
-    formData.append("type", localStorage.getItem("robot")); // modificato
+    formData.append("type", localStorage.getItem("robot"));                                     // modificato
 
     $.ajax({
         url: "/api/allenamento",

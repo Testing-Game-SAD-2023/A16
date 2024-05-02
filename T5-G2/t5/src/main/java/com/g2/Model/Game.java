@@ -1,3 +1,4 @@
+//MODIFICATO
 package com.g2.Model;
 
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
@@ -6,7 +7,7 @@ import java.time.*;
 
 public class Game {
     private int playerId;
-    private String playerName; //aggiunta A16 da A9    
+    private String playerName; //aggiunta A16 da A9  
     private long id;
     private String description;
     private String name;
@@ -20,14 +21,14 @@ public class Game {
         this.classe = classe;
     }
 
-    public Game(int playerId, String description, String name, String difficulty, String username) {
+    //A16 cambiato costruttore rispetto ad  A7: 
+    public Game(int playerId, String playerName, String description, String name, String difficulty) { 
         this.playerId = playerId;
-        this.playerName = playerName; // aggiunta A16 da A9 
+        this.playerName = playerName; //A16 aggiunta A9
         this.description = description;
         this.name = name;
         this.difficulty = difficulty;
         this.classe = "";
-        this.username = username;
     }
 
     public int getPlayerId() {

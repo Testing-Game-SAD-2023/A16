@@ -210,6 +210,7 @@ public class Controller {
 
         String token = Jwts.builder()
                 .setSubject(user.getEmail())
+                .claim("name",user.getName()) //A16 aggiunto per ottenere il nome
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
                 .claim("userId", user.getID())
@@ -334,7 +335,7 @@ public class Controller {
     // }
 
     /* GET PER LE VIEW */
-
+    
     //-------------------------------------A16 - AGGIUNTA DA A6----------------------------
      public String extractName(String jwt){
         try{

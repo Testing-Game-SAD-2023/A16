@@ -1,4 +1,5 @@
-FROM ubuntu:latest
+#A16: modificata la versione perchè libncurses5 libstdc++6 non andavano con l'ultima versione di ubuntu
+FROM ubuntu:18.04
 # FROM openjdk:8-alpine as java8
 
 # FROM openjdk:17-alpine

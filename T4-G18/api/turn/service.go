@@ -1,3 +1,4 @@
+//MODIFICATO
 package turn
 
 import (
@@ -15,7 +16,7 @@ import (
 
 	"github.com/alarmfox/game-repository/api"
 	"github.com/alarmfox/game-repository/model"
-	"gorm.io/gorm" //Aggiunta A16
+	"gorm.io/gorm"
 )
 
 type Repository struct {

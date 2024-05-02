@@ -1,3 +1,4 @@
+//MODIFICATO
 package com.g2.t5;
 
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class GuiController {
     // private Map<Integer, String> hashMap2 = new HashMap<>();
     // private final FileController fileController;
     private RestTemplate restTemplate;
-    //private String nameAuth; //A16 aggiunta //Aggiunta A9
+    private String nameAuth; //A16 aggiunta //Aggiunta A9
     private String IdAuth;  //Aggiunta A9
 
     @Autowired
@@ -150,6 +151,8 @@ public class GuiController {
 
         if (isAuthenticated == null || !isAuthenticated)
             return "redirect:/login";
+
+        nameAuth = restTemplate.postForObject("http://t23-g1-app-1:8080/nameToken", formData, String.class);
 
         List<ClassUT> classes = getClasses();
 
@@ -251,7 +254,10 @@ public class GuiController {
 
         GameDataWriter gameDataWriter = new GameDataWriter();
         // g.setGameId(gameDataWriter.getGameId());
-        Game g = new Game(playerId, "descrizione", "nome", difficulty, username);
+        
+        //A16 cambiato il costruttore nel game.java -> quindi cambiamo anche la creazione qui rispetto ad A7 
+        Game g = new Game(playerId, nameAuth, "descrizione", "nome", difficulty); // A16 Aggiunta
+        
         // g.setPlayerId(pl);
         // g.setPlayerClass(classe);
         // g.setRobot(robot);

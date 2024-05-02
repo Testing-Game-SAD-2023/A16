@@ -487,12 +487,12 @@ public String loginAdmin(@RequestBody Admin admin1) {
 public Admin getAdminByUsername(@PathVariable String username) {
     return srepo.findAdminByUsername(username);
 }
-//A16 - ELENCO GIOCATORI REGISTRATI
+
 @GetMapping("/player")
 	public String showplayer() {
 		return "player";
 	}
-//A16 - LISTA CLASSI
+
 	@GetMapping("class")
 	public String showclass() {
 		return "class";

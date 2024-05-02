@@ -1,3 +1,4 @@
+//MODIFICATO
 package turn
 
 import (
@@ -9,13 +10,13 @@ import (
 
 type Turn struct {
 	ID        int64      `json:"id"`
-	IsWinner  bool       `json:"isWinner"` //A16 - AGGIUNTO DA A6
+	IsWinner  bool       `json:"isWinner"`
 	Order     int	     `json:"order"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdatedAt time.Time  `json:"updatedAt"`
 	PlayerID  int64      `json:"playerId"`
 	RoundID   int64      `json:"roundId"`
-	Scores    string     `json:"scores"`				//A16 Considerazione: ci manca isWinner
+	Scores    string     `json:"scores"`
 	StartedAt *time.Time `json:"startedAt"`
 	ClosedAt  *time.Time `json:"closedAt"`
 	TestClass string     `json:"testClass`				//aggiunto da A6 (A16)
@@ -35,8 +36,8 @@ func (CreateRequest) Validate() error {
 }
 
 type UpdateRequest struct {
-	Scores    string     `json:"scores"`				//A16 Considerazione: ci manca isWinner
-	IsWinner  bool       `json:"isWinner"`	//A16 - AGGIUNTO DA A6
+	Scores    string     `json:"scores"`
+	IsWinner  bool       `json:"isWinner"`				//A16 - AGGIUNTO DA A6
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	ClosedAt  *time.Time `json:"closedAt,omitempty"`
 	TestClass string     `json:"testClass`				//aggiunto da A6 (A16)
@@ -59,12 +60,13 @@ func (k KeyType) AsInt64() int64 {
 	return int64(k)
 }
 
+//se si aggiungesse isWinnser qua dentro darebbe problema di compilazione
 func fromModel(t *model.Turn) Turn {
 	return Turn{
 		ID:        t.ID,
-		IsWinner:  t.IsWinner,		//A16 - AGGIUNTO DA A6
+		IsWinner:  t.IsWinner,
 		Order:     t.Order,
-		Scores:    t.Scores,				//A16 Considerazione: ci manca isWinner
+		Scores:    t.Scores,
 		CreatedAt: t.CreatedAt,
 		UpdatedAt: t.UpdatedAt,
 		PlayerID:  t.PlayerID,

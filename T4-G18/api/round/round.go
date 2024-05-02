@@ -32,6 +32,7 @@ func (CreateRequest) Validate() error {
 type UpdateRequest struct {
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	ClosedAt  *time.Time `json:"closedAt,omitempty"`
+	TestClassId string   `json:"testClassId"`				//A16 aggiunto A16
 }
 
 func (UpdateRequest) Validate() error {

@@ -1,3 +1,4 @@
+//MODIFICATO
 package com.example.T6;
 
 import java.io.IOException;
@@ -293,6 +294,7 @@ public class RunnerHelper {
         obj = new JSONObject();
     
         obj.put("closedAt", time);
+        obj.put("testClassId", nomeCUT);                  //A16 aggiunta A16
     
         jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
     
@@ -311,6 +313,18 @@ public class RunnerHelper {
     
         obj = new JSONObject();
         obj.put("closedAt", time);
+        obj.put("username", request.getParameter("username"));                                                  //A16 aggiunta A16
+        obj.put("difficulty", difficolta);                                                                      //A16 aggiunta A16
+        obj.put("isWinner", Boolean.parseBoolean(win));                                                         //A16 aggiunta A16
+        //A16 qui sotto aggiunta A16 
+        if(mode.equals("bossRush")) {
+            int numberOfBeaten = Integer.parseInt(result.getString("numberOfBeaten"));
+            int numberOfUnbeaten = Integer.parseInt(result.getString("numberOfUnbeaten"));
+            String s = result.getString("score") + "(" + String.valueOf(numberOfBeaten) + "/" + String.valueOf(numberOfBeaten + numberOfUnbeaten) + ")";
+            obj.put("score", s);
+        }
+        else 
+            obj.put("score", result.getString("score"));
     
         jsonEntity = new StringEntity(obj.toString(), ContentType.APPLICATION_JSON);
     

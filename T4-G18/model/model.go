@@ -1,22 +1,23 @@
+//MODIFICATO
 package model
 
 import (
 	"database/sql"
 	"time"
-	"log" //Aggiunta A16
+	"log" 						//Aggiunta A16
 
-	"gorm.io/gorm" //Aggiunta A16
+	"gorm.io/gorm" 				//Aggiunta A16
 )
 
 type Game struct {
 	ID           int64 		`gorm:"primaryKey;autoIncrement"`
-	Name         string		`gorm:"default:null"`				//(A16) considerazione: il relativo su A6 non specifica niente qua
+	Name         string		`gorm:"default:null"`
 	Username     string		`gorm:"default:null"`
 	CurrentRound int   		`gorm:"default:1"`
 	Description  sql.NullString `gorm:"default:null"`
-	Difficulty   string		`gorm:"default:null"`				//(A16) considerazione: il relativo su A6 non specifica niente qua
-	Score		 float64	`gorm:"default:0"`
-	IsWinner  	 bool       `gorm:"default:false"`				//(A16) considerazione: A6 non ha isWinner qua ma lo ha in turn.go
+	Difficulty   string		`gorm:"default:null"`
+	Score		 string		`gorm:"default:0"`						//A16 modificato da float a string
+	IsWinner  	 bool       `gorm:"default:false"`
 	CreatedAt    time.Time  `gorm:"autoCreateTime"`
 	UpdatedAt    time.Time  `gorm:"autoUpdateTime"`
 	StartedAt    *time.Time `gorm:"default:null"`
@@ -44,13 +45,13 @@ func (PlayerGame) TableName() string {
 type Player struct {
 	ID        int64     `gorm:"primaryKey;autoIncrement"`
 	AccountID string    `gorm:"unique"`
-	Name	  string													//aggiunto da A6 (A16)						
+	Name	  string											//aggiunto da A6 (A16)						
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 	Turns     []Turn    `gorm:"foreignKey:PlayerID;constraint:OnDelete:SET NULL;"`
 	Games     []Game    `gorm:"many2many:player_games;foreignKey:AccountID;joinForeignKey:PlayerID;"`
-	Wins      int64     `gorm:"default:0"`								//aggiunto da A6 (A16)
-	TurnsPlayed	int64	`gorm:"default:0"`								//aggiunto da A6 (A16) 
+	Wins      int64     `gorm:"default:0"`						//aggiunto da A6 (A16)
+	TurnsPlayed	int64	`gorm:"default:0"`						//aggiunto da A6 (A16) 
 }
 
 func (Player) TableName() string {
@@ -177,7 +178,7 @@ func UpdatePlayerWins(db *gorm.DB, PlayerID int64) error {
     return nil
 }
 
-type Metadata struct {			
+type Metadata struct {
 	ID        int64         `gorm:"primaryKey;autoIncrement"`
 	CreatedAt time.Time     `gorm:"autoCreateTime"`
 	UpdatedAt time.Time     `gorm:"autoUpdateTime"`

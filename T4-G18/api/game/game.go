@@ -13,12 +13,12 @@ type Game struct {
 	Username     string     `json:"username"`
 	Description  string     `json:"description"`
 	Difficulty   string     `json:"difficulty"`
-	Score		 float64	`json:"score"`
+	Score		 string		`json:"score"`						//A16 modificato da float a string
 	CreatedAt    time.Time  `json:"createdAt"`
 	UpdatedAt    time.Time  `json:"updatedAt"`
 	StartedAt    *time.Time `json:"startedAt"`
 	ClosedAt     *time.Time `json:"closedAt"`
-	IsWinner  	 bool       `json:"isWinner"`				//A16: considerazione, A6 non mette isWinner qui
+	IsWinner  	 bool       `json:"isWinner"`
 	Name         string     `json:"name"`
 	Players      []Player   `json:"players,omitempty"`
 }
@@ -47,10 +47,11 @@ type UpdateRequest struct {
 	Name         string     `json:"name"`
 	Username	 string		`json:"username"`
 	Description  string     `json:"description"`
-	Score		 float64	`json:"score"`
-	IsWinner  	 bool       `json:"isWinner"`				//A16: considerazione, A6 non mette isWinner qui
+	Score		 string		`json:"score"`						//A16 modificato da float a string
+	IsWinner  	 bool       `json:"isWinner"`
 	StartedAt    *time.Time `json:"startedAt,omitempty"`
 	ClosedAt     *time.Time `json:"closedAt,omitempty"`
+	Difficulty 	 string	 	`json:"difficulty`				//aggiunto da A6 (A16)
 }
 
 func (UpdateRequest) Validate() error {
@@ -99,7 +100,7 @@ func fromModel(g *model.Game) Game {
 		CreatedAt:    g.CreatedAt,
 		UpdatedAt:    g.UpdatedAt,
 		Name:         g.Name,
-		IsWinner:     g.IsWinner,					//A16: considerazione, A6 non mette isWinner qui
+		IsWinner:     g.IsWinner,
 		StartedAt:    g.StartedAt,
 		ClosedAt:     g.ClosedAt,
 		Players:      parsePlayers(g.Players),
