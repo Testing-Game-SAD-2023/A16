@@ -91,9 +91,5 @@ Occasionalmente, anche dopo che tutti i container sono stati avviati con success
 
 # Video Dimostrativi
 
-https://github.com/SimoneRinaldi02/A7-2024-ver2/assets/115701124/f99ea16d-caf9-451f-9604-99f5ff2b0960
-
-
-
 
 
