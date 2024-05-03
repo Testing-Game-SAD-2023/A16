@@ -13,7 +13,7 @@ $(document).ready(function() {
   if(idUtente == null || idPartita == null || idTurno == null || nameCUT == null || robotScelto == null) window.location.href = "/main";
 
   $.ajax({
-    url: "http://localhost/api/receiveClassUnderTest",
+    url: "/api/receiveClassUnderTest", // Modifica A16 per pinggy
     type: "GET",
     data: { 
       idUtente: idUtente,
@@ -24,6 +24,7 @@ $(document).ready(function() {
       difficolta: difficolta
     },
     dataType: "text",
+    //crossDomain: true, // A16 Aggiunta per pinggy
     success: function(response) {
       // Ricezione avvenuta con successo
       console.log(response);
@@ -74,7 +75,7 @@ $(document).ready(function() {
       document.getElementById('loading-editor').style.display = 'none';//A16 - AGGIUNTO
       async function valRob() {             
         try {
-          let response = await fetch('http://localhost:3000/robots?testClassId='+localStorage.getItem("classe")+'&type='+localStorage.getItem("robot")+'&difficulty='+localStorage.getItem("difficulty"), 
+          let response = await fetch('/robots?testClassId='+localStorage.getItem("classe")+'&type='+localStorage.getItem("robot")+'&difficulty='+localStorage.getItem("difficulty"), //modifica a16 pinggy
           { method: 'GET' });
           if (!response.ok) {
             throw new Error('Richiesta risultati robot non andata a buon fine');
@@ -104,7 +105,7 @@ $(document).ready(function() {
           }
           
           try {
-            let response = await fetch('http://localhost:3000/turns/'+val.toString(), { method: 'GET' });
+            let response = await fetch('/turns/'+val.toString(), { method: 'GET' }); //modifica a16 pinggy
             if (!response.ok) {
               throw new Error('Richiesta risultati turno non andata a buon fine');
             }
@@ -119,7 +120,7 @@ $(document).ready(function() {
           }
 
           try{
-            let response = await fetch('http://localhost:3080/tests/'+val.toString() + '/Test' + localStorage.getItem("classe"), { method: 'GET' });
+            let response = await fetch('/tests/'+val.toString() + '/Test' + localStorage.getItem("classe"), { method: 'GET' }); //modifica a16 pinggy
             if (!response.ok) {
               throw new Error('Richiesta risultati turno non andata a buon fine');
             }
@@ -180,7 +181,7 @@ runButton.addEventListener("click", function() {
       formData.append("type", localStorage.getItem("robot")); // modificato
       formData.append("username", localStorage.getItem("username"));                                              //A16 aggiunta
       $.ajax({
-        url: "http://localhost/api/run", // con questa verso il task 6, si salva e conclude la partita e si decreta il vincitore
+        url: "/api/run", // con questa verso il task 6, si salva e conclude la partita e si decreta il vincitore // Modifica A16 ulteriore
         type: "POST",
         data: formData,
         processData: false,
@@ -284,7 +285,7 @@ runButton.addEventListener("click", function() {
             //console.log(localStorage.getItem("turnId"));
 
             $.ajax({
-              url:'http://localhost/api/save-data',
+              url:'/api/save-data', //modifica a16 pinggy
               data: {
                 playerId: parseJwt(getCookie("jwt")).userId,
                 classe: localStorage.getItem("classe"),
@@ -325,7 +326,7 @@ runButton.addEventListener("click", function() {
       var test = '/VolumeT8/FolderTreeEvo/Tests/' + localStorage.getItem("turnId");
 
       // Definisci il percorso dell'API
-      var apiBaseUrl = 'http://localhost:3080/api/';
+      var apiBaseUrl = '/api/';   //modifica A16 pinggy
 
       // Concatena il percorso della classe al percorso dell'API
       var url = apiBaseUrl + classe + '+' + test + '+/app';
@@ -425,7 +426,7 @@ var coverageButton = document.getElementById("coverageButton");
     document.getElementById('loading-editor').style.display = 'block'; //A16 - AGGIUNTA
 
     $.ajax({
-      url: "http://localhost/api/getJaCoCoReport",
+      url: "/api/getJaCoCoReport", //modifica a16 pinggy
       type: "POST",
       data: formData,
       processData: false,
@@ -450,7 +451,7 @@ var coverageButton = document.getElementById("coverageButton");
     var test = '/VolumeT8/FolderTreeEvo/Tests/' + localStorage.getItem("turnId");
 
     // Definisci il percorso dell'API
-    var apiBaseUrl = 'http://localhost:3080/api/';
+    var apiBaseUrl = '/api/'; //modifica a16 pinggy
 
     // Concatena il percorso della classe al percorso dell'API
     var url = apiBaseUrl + classe + '+' + test + '+/app';
