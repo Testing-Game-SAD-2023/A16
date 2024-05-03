@@ -28,7 +28,7 @@ $(document).ready(function() {
     success: function(response) {
       // Ricezione avvenuta con successo
       console.log(response);
-      //A16 - INIZIO PROVOLA
+      //A16 - AGGIUNTA
       // Aggiungi i campi e il titolo iniziali alla finestra modale
       var modal2Content=document.querySelector("#infoModal .modal2-content");
       // Aggiungi il titolo
@@ -36,7 +36,7 @@ $(document).ready(function() {
       titleElement.classList.add("modal2-title");
       titleElement.textContent = "GAME INFO";
       modal2Content.insertBefore(titleElement, modal2Content.firstChild);
-      //A16 - FINE PROVOLA
+      //A16 - AGGIUNTA
       // Associa le informazioni ricevute ai campi della finestra modale
       var idUtenteElement = document.createElement("p");
       idUtenteElement.textContent = "UserID: " + idUtente;
