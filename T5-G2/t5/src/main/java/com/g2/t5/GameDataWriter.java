@@ -80,7 +80,7 @@ public class GameDataWriter {
             System.out.println("SONO IN SAVEGAME, GUARDA LO USERNAME : " + game.getUsername());
 
             obj.put("difficulty", game.getDifficulty());
-            obj.put("name", game.getName());
+            obj.put("name", game.getPlayerName());                          //A16 modifica, prima era getName 
             obj.put("description", game.getDescription());
             obj.put("username", game.getUsername());
             obj.put("startedAt", time);
