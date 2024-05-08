@@ -204,11 +204,11 @@ a:hover {
 
                     // Aggiorniamo il conteggio, il tempo totale e lo score per ogni 'accountId'
                     if (!accountStats[accountId]) {
-                        accountStats[accountId] = { count: 1, totalTime: timeDifference, score: entry.score ? entry.score : 0 };
+                        accountStats[accountId] = { count: 1, totalTime: timeDifference, score: parseFloat(entry.score ? entry.score : 0) }; //A16 Converti lo score in float
                     } else {
                         accountStats[accountId].count++;
                         accountStats[accountId].totalTime += timeDifference;
-                        accountStats[accountId].score += entry.score ? entry.score : 0;
+                        accountStats[accountId].score += parseFloat(entry.score ? entry.score : 0); //A16 Converti lo score in float
                     }
                 });
             });
