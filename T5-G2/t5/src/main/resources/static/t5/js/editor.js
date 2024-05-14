@@ -24,7 +24,6 @@ $(document).ready(function() {
       difficolta: difficolta
     },
     dataType: "text",
-    //crossDomain: true, // A16 Aggiunta per pinggy
     success: function(response) {
       // Ricezione avvenuta con successo
       console.log(response);
