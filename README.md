@@ -93,6 +93,7 @@ Occasionalmente, anche dopo che tutti i container sono stati avviati con success
 
 # Modalità "Sfida un Robot"
 
+https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/c95dc0d8-3248-4825-a690-756e39fda947
 
 # Modalità "Sfida tutti i Robot"
 
