@@ -70,16 +70,13 @@ Se è necessario modificare il codice dell'applicazione, seguire attentamente i 
 
 Di seguito sono elencate alcune delle problematiche riscontrate durante l'utilizzo dell'applicazione al fine di agevolarne l'utilizzo per i gruppi successivi.
 
+## Versione di Ubuntu
+Durante le varie installazioni, potrebbe capitare che Ubuntu aggiorni le proprie versioni facendo si che le installazioni non vadano a buon fine. Questo problema si è verificato, in particolare, nel task T1, dove nel Dockerfile avevamo "FROM ubuntu:latest", che installa l'ultima verisone disponibile di Ubuntu.
+Per risolvere tale bug abbiamo specificato la versione da utilizzare, correggendo in "FROM ubuntu:18.04".
+
 ## Cache del browser
 
-Disattivando la cache del browser, è possibile garantire che ogni modifica apportata al codice sorgente o alle risorse dell'applicazione sia immediatamente visualizzata nel browser. La cache del browser può causare problemi di compatibilità e disattivarla semplifica il processo di debug, consentendo agli sviluppatori di identificare e risolvere rapidamente i bug senza dover preoccuparsi di eventuali caching persistenti che potrebbero mascherare il problema.
-
-## Versione Docker
-
-Durante lo sviluppo dell'applicazione, è emersa una problematica legata alla versione di Docker. È stato osservato che nelle versioni più recenti di Docker, dopo una serie di disinstallazioni e reinstallazioni dell'applicazione, potrebbero verificarsi problemi durante il download quando si avvia il file `installer.bat`. Nel caso in cui si riscontrino errori come quello mostrato nella figura seguente, potrebbe essere necessario disinstallare Docker e utilizzare una versione non successiva alla `4.25.1` evitando così errori nella costruzione dei container.
-
-![Errore Installer.bat](Media/Foto/ErrorInstaller.png)
-
+Pulendo la cache del browser, è possibile garantire che ogni modifica apportata al codice sorgente o alle risorse dell'applicazione sia immediatamente visualizzata nel browser. La cache del browser può causare problemi di compatibilità e pulirla semplifica il processo di debug, consentendo agli sviluppatori di identificare e risolvere rapidamente i bug senza dover preoccuparsi di eventuali caching persistenti che potrebbero mascherare il problema.
 
 ## Porte già in uso
 
@@ -93,8 +90,12 @@ Occasionalmente, anche dopo che tutti i container sono stati avviati con success
 
 # Modalità "Sfida un Robot"
 
+https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/c95dc0d8-3248-4825-a690-756e39fda947
 
 # Modalità "Sfida tutti i Robot"
 
 
+
 # Modalità "Allenamento"
+
+
