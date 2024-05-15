@@ -1,55 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" th:href="@{/t23/css/register.css}" />
     <script th:src="@{/t23/js/register.js}"></script>
-  </head>
-  <body>
-    <div class="container">
+</head>
+<body>
+<div class="container">
     <h1>REGISTRAZIONE</h1>
-    <form th:action="@{/register}" method="post" >
-  
-      <input type="text" id="name" name="name" required placeholder="Nome">
-
-      <input type="text" id="surname" name="surname" required placeholder="Cognome">
-
-      <input type="email" id="email" name="email" required placeholder="Indirizzo e-mail">
-
-      <input type="password" id="password" name="password" required placeholder="Password">
-
-      <input type="password" id="check_password" name="check_password" required placeholder="Conferma Password">
-
-      <select id="studies" name="studies" placeholder="Corso di studi">
-        <option value="BSc">BSc</option>
-        <option value="MSc">MSc</option>
-        <option value="ALTRO">ALTRO</option>
-      </select>
-      
-      <div class= "g-recaptcha m-3 row justify-content-center" 
-      data-sitekey="6LcZN2QmAAAAACw4po2gr-Efo0k8ubA6cKB_CJxN" style="display:none"></div>
-      
-      <input type="submit" value="Invia"> 
-      
+    <form id="registerForm" onsubmit="event.preventDefault(); register();"> <!-- A16  Modificato id per gestire redirect a pagina di login dopo registrazione-->
+        <input type="text" id="name" name="name" required placeholder="Nome">
+        <input type="text" id="surname" name="surname" required placeholder="Cognome">
+        <input type="email" id="email" name="email" required placeholder="Indirizzo e-mail">
+        <input type="password" id="password" name="password" required placeholder="Password">
+        <input type="password" id="check_password" name="check_password" required placeholder="Conferma Password">
+        <select id="studies" name="studies" placeholder="Corso di studi">
+            <option value="BSc">BSc</option>
+            <option value="MSc">MSc</option>
+            <option value="ALTRO">ALTRO</option>
+        </select>
+        <div class="g-recaptcha m-3 row justify-content-center" 
+             data-sitekey="6LcZN2QmAAAAACw4po2gr-Efo0k8ubA6cKB_CJxN" style="display:none"></div>
+        <input type="submit" value="Invia">
     </form>
+    <a class="register-signup-now" data-uia="register-signup-now" href="/login">
+        Sei già registrato? Accedi.</a>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- A16  Aggiunta function per effettuare redirect a pagina di login dopo registrazione, se avvenuta con successo-->
+    <script type="text/javascript">
+        function register() {
+            const form = document.getElementById('registerForm');
+            const formData = new FormData(form);
+            const searchParams = new URLSearchParams();
+            for (const pair of formData) {
+                searchParams.append(pair[0], pair[1]);
+            }
 
-    	<a class="register-signup-now" data-uia="register-signup-now" href="/login">
-      Sei già registrato? Accedi.</a>
-      
-       <script src="https://www.google.com/recaptcha/api.js" async defer></script> 
-      <script type="text/javascript">
-        
-        function validateForm(){
-          /*if(grecaptcha.getResponse()){
-            return true;
-          } else {
-            alert("Please, prove that you're not a robot!")
-            return false;
-          } */
-          return true;
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: searchParams.toString()
+            }).then(response => {
+                if (response.ok) {
+                    return response.text().then(data => {
+                        alert(data);
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 1000); // Redirect dopo 1 secondo
+                    });
+                } else {
+                    return response.text().then(data => {
+                        alert("Errore: " + data);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
-      </script>
-    </div>
-  </body>
+        
+    </script>
+</div>
+</body>
 </html>
