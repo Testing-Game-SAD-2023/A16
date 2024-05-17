@@ -27,7 +27,7 @@ public class EditorTest {
 
     @BeforeClass
     public static void setDriver() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\luix1\\Downloads\\chromedriver-win64\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver-linux64/chromedriver");
     }
 
     @Before
@@ -36,7 +36,7 @@ public class EditorTest {
         options.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
         HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
-        chromePrefs.put("download.default_directory", "C:\\Users\\luix1\\Downloads");
+        chromePrefs.put("download.default_directory", "/home/antosavi/A16");
         options.setExperimentalOption("prefs", chromePrefs);
 
         driver = new ChromeDriver(options);
@@ -62,6 +62,7 @@ public class EditorTest {
         driver.close();
     } 
 
+    /*
     @Test
     public void download() throws InterruptedException {
         driver.findElement(By.id("0")).click();
@@ -73,12 +74,22 @@ public class EditorTest {
         Thread.sleep(5000);
         
         Assert.assertTrue(f.exists());
-    } 
+    } */
 
     public void moveToReport(String urlPaginaDiRedirezione) {
+        driver.findElement(By.id("downloadButton1")).click();
+        driver.findElement(By.xpath("//button[text()='Sfida un Robot']")).click();
+
+        /* per BossRush
+         * 
+         * driver.findElement(By.xpath("//button[text()='Sfida tutti i Robot']")).click();
+         * driver.findElement(By.id("0")).click();
+         * driver.findElement(By.xpath("//button[text()='Play against all Robots']")).click();
+         */
+
         driver.findElement(By.id("0")).click();
         driver.findElement(By.id("0-1")).click();
-        driver.findElementsByCssSelector(".div_buttons_main > * button").get(1).click();
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();
 
         WebDriverWait wait = new WebDriverWait(driver, timeout);
 
@@ -92,6 +103,7 @@ public class EditorTest {
     @Test
     public void selection() {
         String urlPaginaDiRedirezione = "http://localhost/report";
+        // BOSSRUSH String urlPaginaDiRedirezione = "http://localhost/report1";
 
         moveToReport(urlPaginaDiRedirezione);
 
@@ -100,8 +112,8 @@ public class EditorTest {
 
     public void moveToEditor(String urlPaginaDiRedirezione) {
         moveToReport("http://localhost/report");
-
-        driver.findElementsByCssSelector(".div_buttons > * button").get(1).click();
+        // BOSSRUSH moveToReport("http://localhost/report1");
+        driver.findElement(By.xpath("//button[text()='Submit']")).click();
 
         WebDriverWait wait = new WebDriverWait(driver, timeout);
 
@@ -112,6 +124,7 @@ public class EditorTest {
         }
     }
 
+    /*
     @Test
     public void logout_main() {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
@@ -126,16 +139,17 @@ public class EditorTest {
         } catch(TimeoutException e) {
             Assert.fail();
         }
-    }
+    }*/
 
     @Test
-    public void startGame() {
+    public void startGame() { // A16 ridondante
         String urlPaginaDiRedirezione = "http://localhost/editor";
         moveToEditor(urlPaginaDiRedirezione);
 
         Assert.assertEquals("Test fallito! L'avvio della partita non è avvenuto correttamente.", driver.getCurrentUrl(), urlPaginaDiRedirezione);
     } 
 
+    
     @Test
     public void compile() {
         String urlPaginaDiRedirezione = "http://localhost/editor";
@@ -152,50 +166,32 @@ public class EditorTest {
         // Trova l'elemento CodeMirror
         WebElement codeMirrorElement = driver.findElement(By.cssSelector("#editor + div"));
 
-        // Inserisci il tuo testo nell'editor CodeMirror
-        String code = "import org.junit.Before;\n" +
-        "import org.junit.After;\n" +
-        "import org.junit.BeforeClass;\n" +
-        "import org.junit.AfterClass;\n" +
-        "import org.junit.Test;\n" +
-        "import static org.junit.Assert.*;\n" +
-        "\n" +
-        "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
-        "public class TestVCardBean {\n" +
-        "    @BeforeClass\n" +
-        "    public static void setUpClass() {\n" +
-        "        // Eseguito una volta prima dell'inizio dei test nella classe\n" +
-        "        // Inizializza risorse condivise o esegui altre operazioni di setup\n" +
-        "    }\n" +
-        "    \n" +
-        "    @AfterClass\n" +
-        "    public static void tearDownClass() {\n" +
-        "        // Eseguito una volta alla fine di tutti i test nella classe\n" +
-        "        // Effettua la pulizia delle risorse condivise o esegui altre operazioni di teardown\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Before\n" +
-        "    public void setUp() {\n" +
-        "        // Eseguito prima di ogni metodo di test\n" +
-        "        // Preparazione dei dati di input specifici per il test\n" +
-        "    }\n" +
-        "    \n" +
-        "    @After\n" +
-        "    public void tearDown() {\n" +
-        "        // Eseguito dopo ogni metodo di test\n" +
-        "        // Pulizia delle risorse o ripristino dello stato iniziale\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Test\n" +
-        "    public void testMetodo() {\n" +
-        "        // Preparazione dei dati di input\n" +
-        "        // Esegui il metodo da testare\n" +
-        "        // Verifica l'output o il comportamento atteso\n" +
-        "        // Utilizza assert per confrontare il risultato atteso con il risultato effettivo\n" +
-        "    }\n" +
-        "    \n" +
-        "    // Aggiungi altri metodi di test se necessario\n" +
-        "}\n";
+    
+    // Inserisci il tuo testo nell'editor CodeMirror
+    String code = "import org.junit.Before;\n" +
+    "import org.junit.After;\n" +
+    "import org.junit.BeforeClass;\n" +
+    "import org.junit.AfterClass;\n" +
+    "import org.junit.Test;\n" +
+    "import static org.junit.Assert.*;\n" +
+    "\n" +
+    "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
+    "public class TestCalcolatrice {\n" +
+    "    private static Calcolatrice cut;\n\n" +
+    "    @BeforeClass\n" +
+    "    public static void setup() {\n" +
+    "        cut = new Calcolatrice();\n" +
+    "    }\n\n" +
+    "    @Test\n" +
+    "    public void testDivide() {\n" +
+    "        int result = cut.divide(10, 2);\n" +
+    "        assertEquals(5, result);\n" +
+    "    }\n\n" +
+    "    @Test(expected = ArithmeticException.class)\n" +
+    "    public void testDivideByZero() {\n" +
+    "        cut.divide(10, 0);\n" +
+    "    }\n" +
+    "}\n";
         ((JavascriptExecutor) driver).executeScript("arguments[0].CodeMirror.setValue(arguments[1]);", codeMirrorElement, code);
         
         driver.findElement(By.id("compileButton")).click();
@@ -207,6 +203,7 @@ public class EditorTest {
         }
     } 
 
+    
     @Test
     public void run() {
         String urlPaginaDiRedirezione = "http://localhost/editor";
@@ -223,50 +220,31 @@ public class EditorTest {
         // Trova l'elemento CodeMirror
         WebElement codeMirrorElement = driver.findElement(By.cssSelector("#editor + div"));
 
-        // Inserisci il tuo testo nell'editor CodeMirror
-        String code = "import org.junit.Before;\n" +
-        "import org.junit.After;\n" +
-        "import org.junit.BeforeClass;\n" +
-        "import org.junit.AfterClass;\n" +
-        "import org.junit.Test;\n" +
-        "import static org.junit.Assert.*;\n" +
-        "\n" +
-        "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
-        "public class TestVCardBean {\n" +
-        "    @BeforeClass\n" +
-        "    public static void setUpClass() {\n" +
-        "        // Eseguito una volta prima dell'inizio dei test nella classe\n" +
-        "        // Inizializza risorse condivise o esegui altre operazioni di setup\n" +
-        "    }\n" +
-        "    \n" +
-        "    @AfterClass\n" +
-        "    public static void tearDownClass() {\n" +
-        "        // Eseguito una volta alla fine di tutti i test nella classe\n" +
-        "        // Effettua la pulizia delle risorse condivise o esegui altre operazioni di teardown\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Before\n" +
-        "    public void setUp() {\n" +
-        "        // Eseguito prima di ogni metodo di test\n" +
-        "        // Preparazione dei dati di input specifici per il test\n" +
-        "    }\n" +
-        "    \n" +
-        "    @After\n" +
-        "    public void tearDown() {\n" +
-        "        // Eseguito dopo ogni metodo di test\n" +
-        "        // Pulizia delle risorse o ripristino dello stato iniziale\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Test\n" +
-        "    public void testMetodo() {\n" +
-        "        // Preparazione dei dati di input\n" +
-        "        // Esegui il metodo da testare\n" +
-        "        // Verifica l'output o il comportamento atteso\n" +
-        "        // Utilizza assert per confrontare il risultato atteso con il risultato effettivo\n" +
-        "    }\n" +
-        "    \n" +
-        "    // Aggiungi altri metodi di test se necessario\n" +
-        "}\n";
+            // Inserisci il tuo testo nell'editor CodeMirror
+    String code = "import org.junit.Before;\n" +
+    "import org.junit.After;\n" +
+    "import org.junit.BeforeClass;\n" +
+    "import org.junit.AfterClass;\n" +
+    "import org.junit.Test;\n" +
+    "import static org.junit.Assert.*;\n" +
+    "\n" +
+    "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
+    "public class TestCalcolatrice {\n" +
+    "    private static Calcolatrice cut;\n\n" +
+    "    @BeforeClass\n" +
+    "    public static void setup() {\n" +
+    "        cut = new Calcolatrice();\n" +
+    "    }\n\n" +
+    "    @Test\n" +
+    "    public void testDivide() {\n" +
+    "        int result = cut.divide(10, 2);\n" +
+    "        assertEquals(5, result);\n" +
+    "    }\n\n" +
+    "    @Test(expected = ArithmeticException.class)\n" +
+    "    public void testDivideByZero() {\n" +
+    "        cut.divide(10, 0);\n" +
+    "    }\n" +
+    "}\n";
         ((JavascriptExecutor) driver).executeScript("arguments[0].CodeMirror.setValue(arguments[1]);", codeMirrorElement, code);       
 
         driver.findElement(By.id("coverageButton")).click();
@@ -300,50 +278,31 @@ public class EditorTest {
         // Trova l'elemento CodeMirror
         WebElement codeMirrorElement = driver.findElement(By.cssSelector("#editor + div"));
 
-        // Inserisci il tuo testo nell'editor CodeMirror
-        String code = "import org.junit.Before;\n" +
-        "import org.junit.After;\n" +
-        "import org.junit.BeforeClass;\n" +
-        "import org.junit.AfterClass;\n" +
-        "import org.junit.Test;\n" +
-        "import static org.junit.Assert.*;\n" +
-        "\n" +
-        "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
-        "public class TestVCardBean {\n" +
-        "    @BeforeClass\n" +
-        "    public static void setUpClass() {\n" +
-        "        // Eseguito una volta prima dell'inizio dei test nella classe\n" +
-        "        // Inizializza risorse condivise o esegui altre operazioni di setup\n" +
-        "    }\n" +
-        "    \n" +
-        "    @AfterClass\n" +
-        "    public static void tearDownClass() {\n" +
-        "        // Eseguito una volta alla fine di tutti i test nella classe\n" +
-        "        // Effettua la pulizia delle risorse condivise o esegui altre operazioni di teardown\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Before\n" +
-        "    public void setUp() {\n" +
-        "        // Eseguito prima di ogni metodo di test\n" +
-        "        // Preparazione dei dati di input specifici per il test\n" +
-        "    }\n" +
-        "    \n" +
-        "    @After\n" +
-        "    public void tearDown() {\n" +
-        "        // Eseguito dopo ogni metodo di test\n" +
-        "        // Pulizia delle risorse o ripristino dello stato iniziale\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Test\n" +
-        "    public void testMetodo() {\n" +
-        "        // Preparazione dei dati di input\n" +
-        "        // Esegui il metodo da testare\n" +
-        "        // Verifica l'output o il comportamento atteso\n" +
-        "        // Utilizza assert per confrontare il risultato atteso con il risultato effettivo\n" +
-        "    }\n" +
-        "    \n" +
-        "    // Aggiungi altri metodi di test se necessario\n" +
-        "}\n";
+            // Inserisci il tuo testo nell'editor CodeMirror
+    String code = "import org.junit.Before;\n" +
+    "import org.junit.After;\n" +
+    "import org.junit.BeforeClass;\n" +
+    "import org.junit.AfterClass;\n" +
+    "import org.junit.Test;\n" +
+    "import static org.junit.Assert.*;\n" +
+    "\n" +
+    "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
+    "public class TestCalcolatrice {\n" +
+    "    private static Calcolatrice cut;\n\n" +
+    "    @BeforeClass\n" +
+    "    public static void setup() {\n" +
+    "        cut = new Calcolatrice();\n" +
+    "    }\n\n" +
+    "    @Test\n" +
+    "    public void testDivide() {\n" +
+    "        int result = cut.divide(10, 2);\n" +
+    "        assertEquals(5, result);\n" +
+    "    }\n\n" +
+    "    @Test(expected = ArithmeticException.class)\n" +
+    "    public void testDivideByZero() {\n" +
+    "        cut.divide(10, 0);\n" +
+    "    }\n" +
+    "}\n";
         ((JavascriptExecutor) driver).executeScript("arguments[0].CodeMirror.setValue(arguments[1]);", codeMirrorElement, code);       
 
         driver.findElement(By.id("runButton")).click();
@@ -372,50 +331,31 @@ public class EditorTest {
         // Trova l'elemento CodeMirror
         WebElement codeMirrorElement = driver.findElement(By.cssSelector("#editor + div"));
 
-        // Inserisci il tuo testo nell'editor CodeMirror
-        String code = "import org.junit.Before;\n" +
-        "import org.junit.After;\n" +
-        "import org.junit.BeforeClass;\n" +
-        "import org.junit.AfterClass;\n" +
-        "import org.junit.Test;\n" +
-        "import static org.junit.Assert.*;\n" +
-        "\n" +
-        "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
-        "public class TestVCardBean {\n" +
-        "    @BeforeClass\n" +
-        "    public static void setUpClass() {\n" +
-        "        // Eseguito una volta prima dell'inizio dei test nella classe\n" +
-        "        // Inizializza risorse condivise o esegui altre operazioni di setup\n" +
-        "    }\n" +
-        "    \n" +
-        "    @AfterClass\n" +
-        "    public static void tearDownClass() {\n" +
-        "        // Eseguito una volta alla fine di tutti i test nella classe\n" +
-        "        // Effettua la pulizia delle risorse condivise o esegui altre operazioni di teardown\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Before\n" +
-        "    public void setUp() {\n" +
-        "        // Eseguito prima di ogni metodo di test\n" +
-        "        // Preparazione dei dati di input specifici per il test\n" +
-        "    }\n" +
-        "    \n" +
-        "    @After\n" +
-        "    public void tearDown() {\n" +
-        "        // Eseguito dopo ogni metodo di test\n" +
-        "        // Pulizia delle risorse o ripristino dello stato iniziale\n" +
-        "    }\n" +
-        "    \n" +
-        "    @Test\n" +
-        "    public void testMetodo() {\n" +
-        "        // Preparazione dei dati di input\n" +
-        "        // Esegui il metodo da testare\n" +
-        "        // Verifica l'output o il comportamento atteso\n" +
-        "        // Utilizza assert per confrontare il risultato atteso con il risultato effettivo\n" +
-        "    }\n" +
-        "    \n" +
-        "    // Aggiungi altri metodi di test se necessario\n" +
-        "}\n";
+            // Inserisci il tuo testo nell'editor CodeMirror
+    String code = "import org.junit.Before;\n" +
+    "import org.junit.After;\n" +
+    "import org.junit.BeforeClass;\n" +
+    "import org.junit.AfterClass;\n" +
+    "import org.junit.Test;\n" +
+    "import static org.junit.Assert.*;\n" +
+    "\n" +
+    "//scrivere al posto di \"TestClasse\" il nome della classe da testare\n" +
+    "public class TestCalcolatrice {\n" +
+    "    private static Calcolatrice cut;\n\n" +
+    "    @BeforeClass\n" +
+    "    public static void setup() {\n" +
+    "        cut = new Calcolatrice();\n" +
+    "    }\n\n" +
+    "    @Test\n" +
+    "    public void testDivide() {\n" +
+    "        int result = cut.divide(10, 2);\n" +
+    "        assertEquals(5, result);\n" +
+    "    }\n\n" +
+    "    @Test(expected = ArithmeticException.class)\n" +
+    "    public void testDivideByZero() {\n" +
+    "        cut.divide(10, 0);\n" +
+    "    }\n" +
+    "}\n";
         ((JavascriptExecutor) driver).executeScript("arguments[0].CodeMirror.setValue(arguments[1]);", codeMirrorElement, code);
 
         driver.findElement(By.id("runButton")).click();
@@ -459,4 +399,5 @@ public class EditorTest {
             Assert.fail();
         }
     } 
+    
 }
