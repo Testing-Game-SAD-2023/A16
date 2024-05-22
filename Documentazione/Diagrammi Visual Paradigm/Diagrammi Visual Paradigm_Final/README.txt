@@ -1,1 +1,0 @@
-In questo progetto sono presenti tutti i diagrammi creati su VS presenti nella tesina di A16 ad eccezione di quelli creati online tramite altri editor. Ogni altro diagramma è presente con il suo nome specifico fuori questa cartella.
