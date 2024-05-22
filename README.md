@@ -94,21 +94,18 @@ https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/c95dc0d8-3248-4825
 
 # Modalità "Sfida tutti i Robot"
 
-
-
-# Modalità "Allenamento"
+https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/c8ee3e29-3251-447f-8db5-fc90bceeb7d8
 
 # Testing con Selenium
 Abbiamo testato l'applicazione anche utilizzando il programma Selenium per effettuare testing automatizzato.
 
 ## Modalità "Sfida un Robot"
 
-https://github.com/Testing-Game-SAD-2023/A16/assets/112713694/9a300092-e379-4971-9039-6a66d1065d24
+https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/7792907a-9e0a-4b0b-9fdd-8b79e97b70b3
 
 ## Modalità "Sfida tutti i Robot"
 
-https://github.com/Testing-Game-SAD-2023/A16/assets/112713694/b2f00b6d-02d9-4fb5-90c8-94a19d85de2d
 
 
-
+https://github.com/Testing-Game-SAD-2023/A16/assets/120009337/1a5156aa-debd-4f3e-80c7-dff67919142f
 
