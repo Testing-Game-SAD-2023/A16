@@ -457,6 +457,7 @@ var coverageButton = document.getElementById("coverageButton");
 
     const javaCode = editor.getValue(); // codice della classe di test
 
+    document.getElementById('loading-result').style.display = 'block'; //A16 -AGGIUNTA
     fetch(url, { 
           method: 'POST', 
           headers: { 'Content-Type': 'text/plain' },
@@ -502,6 +503,8 @@ var coverageButton = document.getElementById("coverageButton");
               var terzoElemento5 = parseInt(settimoRowElements[2]*100);
               var terzoElemento6 = parseInt(ottavoRowElements[2]*100);
               var terzoElemento7 = parseInt(nonoRowElements[2]*100);
+            
+              document.getElementById('loading-result').style.display = 'none'; //A16 - AGGIUNTA
 
               console.log('Terzo elemento della seconda riga:', terzoElemento);
               consoleArea.setValue(`Esito Risultati (percentuale di linee coperte)
@@ -522,6 +525,7 @@ Il tuo punteggio EvoSuite: ${terzoElemento7}% CBranch`);
         reader.readAsText(blob);
       })
       .catch(function (error) {
+        document.getElementById('loading-result').style.display = 'none'; //A16 - AGGIUNTA
         console.log('Si è verificato un errore:', error);
       });
 
